@@ -1,9 +1,9 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import {CustomerDetailsDialogComponent} from "./customer-details-dialog.component";
-import {CustomerDetailsDialogInterface, Reward} from "./customer-details-dialog.interface";
+import {CustomerDetailsDialogInterface} from "./customer-details-dialog.interface";
 import {ActionService} from "../../../core/actions/action.service";
-import {validateDoesNotExist, validateIcon, validateText} from "../../../utilites/test-utils";
+import {validateDoesNotExist, validateExist} from "../../../utilites/test-utils";
 import {By} from "@angular/platform-browser";
 import {IActionItem} from "../../../core/actions/action-item.interface";
 import {PhonePipe} from "../../../shared/pipes/phone.pipe";
@@ -12,9 +12,9 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {ElectronService} from "ngx-electron";
 import {CLIENTCONTEXT} from "../../../core/client-context/client-context-provider.interface";
 import {TimeZoneContext} from "../../../core/client-context/time-zone-context";
-import {FormattersService} from "../../../core/services/formatters.service";
 import {Observable, of} from "rxjs";
 import {MediaBreakpoints, OpenposMediaService} from "../../../core/media/openpos-media.service";
+import {Reward} from "../../../shared/screen-parts/rewards-line-item/rewards-line-item.interface";
 
 class MockActionService {};
 class MockMatDialog {};
@@ -123,101 +123,8 @@ describe('CustomerDetailsDialog', () => {
 
     describe('template', () => {
       describe('user details', () => {
-        it('displays an account icon', () => {
-          const icon = fixture.debugElement.query(By.css('.grid-container .icon'));
-          expect(icon.nativeElement).toBeDefined();
-        });
-
-        it('displays the customer name', () => {
-          const nameElement = fixture.debugElement.query(By.css('.grid-container .details .customer-name'));
-          expect(nameElement.nativeElement).toBeDefined();
-          expect(nameElement.nativeElement.textContent).toContain(component.screen.customer.name);
-        });
-
-        it('displays the customer email and icon', () => {
-          validateText(fixture, '.details .email', component.screen.customer.email);
-          validateIcon(fixture, '.details .email app-icon', 'mail_outline');
-        });
-
-        it('displays the customer phone number and icon', () => {
-          const phonePipe: PhonePipe = new PhonePipe(TestBed.get(FormattersService));
-          validateText(fixture, '.details .phone-number', phonePipe.transform(component.screen.customer.phoneNumber));
-          validateIcon(fixture, '.details .phone-number app-icon', 'phone');
-        });
-
-        it('displays the customer loyalty number and icon', () => {
-          validateText(fixture, '.details .loyalty-number', component.screen.customer.loyaltyNumber);
-          validateIcon(fixture, '.details .loyalty-number app-icon', 'account_heart');
-        });
-
-        describe('customer address', () => {
-          it('displays the icon', () => {
-            validateIcon(fixture, '.details .address app-icon', 'place');
-          });
-
-          describe('line1', () => {
-            it('does not render the row if line1 is undefined', () => {
-              component.screen.customer.address.line1 = undefined;
-              fixture.detectChanges();
-              validateDoesNotExist(fixture,'.details .address .line1');
-            });
-            it('renders the line1 data', () => {
-              component.screen.customer.address.line1 = 'line 1 content';
-              fixture.detectChanges();
-              validateText(fixture, '.details .address .line1', 'line 1 content');
-            });
-          });
-
-          describe('line2', () => {
-            it('does not render the row if line2 is undefined', () => {
-              component.screen.customer.address.line2 = undefined;
-              fixture.detectChanges();
-              validateDoesNotExist(fixture,'.details .address .line2');
-            });
-            it('renders the line2 data', () => {
-              component.screen.customer.address.line2 = 'line 2 content';
-              fixture.detectChanges();
-              validateText(fixture, '.details .address .line2', 'line 2 content');
-            });
-          });
-
-          describe('line3', () => {
-            it('does not render the "city, " if city is undefined', () => {
-              component.screen.customer.address.city = undefined;
-              fixture.detectChanges();
-              validateDoesNotExist(fixture,'.details .address .line3 .city');
-            });
-
-            it('renders the city', () => {
-              component.screen.customer.address.city = 'a city';
-              fixture.detectChanges();
-              validateText(fixture, '.details .address .line3', 'a city, ');
-            });
-
-            it('does not render the "state " if state is undefined', () => {
-              component.screen.customer.address.state = undefined;
-              fixture.detectChanges();
-              validateDoesNotExist(fixture,'.details .address .line3 .state');
-            });
-
-            it('renders the city', () => {
-              component.screen.customer.address.state = 'OH';
-              fixture.detectChanges();
-              validateText(fixture, '.details .address .line3', 'OH ');
-            });
-
-            it('does not render the "postalCode" if postal code is undefined', () => {
-              component.screen.customer.address.postalCode = undefined;
-              fixture.detectChanges();
-              validateDoesNotExist(fixture,'.details .address .line3 .postalCode');
-            });
-
-            it('renders the postalCode', () => {
-              component.screen.customer.address.state = '12345';
-              fixture.detectChanges();
-              validateText(fixture, '.details .address .line3', '12345');
-            });
-          });
+        it('renders the app-customer-information component', () => {
+          validateExist(fixture, '.customer-details app-customer-information');
         });
       });
       describe('membership details', () => {

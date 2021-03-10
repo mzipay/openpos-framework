@@ -170,6 +170,7 @@ import { ModalOverlayContainerDirective } from './modal-overlay-container/modal-
 import { MembershipDisplayComponent } from "./screen-parts/membership-display/membership-display.component";
 import { ImageScannerComponent } from '../core/platform-plugins/barcode-scanners/image-scanner.component';
 import {RewardsLineItemComponent} from "./screen-parts/rewards-line-item/rewards-line-item.component";
+import { CustomerInformationComponent } from './screen-parts/customer-information/customer-information.component';
 
 const screenParts = [
     TenderPartComponent,
@@ -185,6 +186,7 @@ const screenParts = [
     DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
     MembershipDisplayComponent,
+    CustomerInformationComponent,
     RewardsLineItemComponent,
     ProgressBarPartComponent,
     WebcamViewerComponent,

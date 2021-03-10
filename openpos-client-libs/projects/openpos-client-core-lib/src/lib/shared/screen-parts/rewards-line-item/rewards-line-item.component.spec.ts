@@ -10,10 +10,10 @@ import {CLIENTCONTEXT} from "../../../core/client-context/client-context-provide
 import {TimeZoneContext} from "../../../core/client-context/time-zone-context";
 import {ActionService} from "../../../core/actions/action.service";
 import {KeyPressProvider} from "../../providers/keypress.provider";
-import {Reward} from "../../../screens-with-parts/sale/customer-details-dialog/customer-details-dialog.interface";
 import {validateDoesNotExist, validateExist, validateIcon, validateText} from "../../../utilites/test-utils";
 import {IActionItem} from "../../../core/actions/action-item.interface";
 import {By} from "@angular/platform-browser";
+import {Reward} from "./rewards-line-item.interface";
 
 class MockActionService {};
 class MockMatDialog {};

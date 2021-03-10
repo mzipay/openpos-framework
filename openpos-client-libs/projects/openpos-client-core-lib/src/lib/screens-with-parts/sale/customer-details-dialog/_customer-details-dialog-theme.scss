@@ -15,7 +15,7 @@
 
     .grid-container {
         .memberships .wrapper {
-            border: 2px solid map_get($foreground, icon);
+            border: 2px solid map_get($foreground, border);
         }
     }
 
@@ -76,13 +76,13 @@
                 padding-left: 3px;
             }
         }
-
     }
     .tabs.mobile {
         mat-card {
             margin: 0px;
             padding: 0px;
         }
+
         .no-items {
             padding-top: 5px;
             padding-bottom: 5px;
@@ -92,6 +92,14 @@
 
             &.mobile {
                 font-size: $text-xs-mobile*1.25;
+            }
+        }
+
+        app-customer-information {
+            .details-row {
+                margin-bottom: 20px;
+                padding-left: 10px;
+                padding-right: 10px;
             }
         }
     }

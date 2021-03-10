@@ -60,19 +60,6 @@ app-content-card {
       font-size: 24px;
       font-weight: bold;
     }
-    .customer-details {
-      .material-icons {
-        display: inline-block;
-        margin-right: 5px;
-
-      }
-      .details-row {
-        margin-top: 10px;
-      }
-      .address-details {
-        display: inline-grid;
-      }
-    }
   }
   .memberships {
     padding-bottom: 10px;
@@ -126,6 +113,11 @@ app-content-card {
   .memberships {
     padding-top: 5px;
     display: inline-block;
+  }
+
+  .contactTab {
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
 

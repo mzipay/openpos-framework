@@ -1,7 +1,6 @@
 import {Component, Injector, Input} from '@angular/core';
-import {Reward} from "../../../screens-with-parts/sale/customer-details-dialog/customer-details-dialog.interface";
 import {ScreenPartComponent} from "../screen-part";
-import {RewardsLineItemComponentInterface} from "./rewards-line-item.interface";
+import {Reward, RewardsLineItemComponentInterface} from "./rewards-line-item.interface";
 import {Observable} from "rxjs";
 import {MediaBreakpoints, OpenposMediaService} from "../../../core/media/openpos-media.service";
 
