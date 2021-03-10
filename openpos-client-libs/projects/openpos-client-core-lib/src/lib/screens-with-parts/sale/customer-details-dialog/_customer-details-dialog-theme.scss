@@ -12,6 +12,9 @@
         color: mat-color($foreground, secondary-text);
     }
 
+    .mat-dialog-container {
+        overflow: inherit;
+    }
 
     .grid-container {
         .memberships .wrapper {
@@ -54,6 +57,9 @@
     .details-wrapper {
         display: inherit;
         min-height: inherit;
+        .content {
+            overflow-y: inherit;
+        }
     }
 
     .line {

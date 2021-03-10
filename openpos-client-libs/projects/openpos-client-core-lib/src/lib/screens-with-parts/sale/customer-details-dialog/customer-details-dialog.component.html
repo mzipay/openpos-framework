@@ -35,7 +35,7 @@
                 </mat-card>
             </mat-tab>
             <mat-tab class="rewardsTab" [label]="getRewardsLabel()">
-                <mat-card class="rewardsContent">
+                <mat-card [ngClass]="{'rewardsContent': true, 'no-promotions': !(screen.customer.rewards && screen.customer.rewards.length)}">
                     <div *ngIf="(screen.customer.rewards && screen.customer.rewards.length)" >
                         <div *ngFor="let reward of screen.customer.rewards" class="line">
                             <app-rewards-line-item [reward]="reward"></app-rewards-line-item>
@@ -46,23 +46,10 @@
                     </div>
                 </mat-card>
             </mat-tab>
-            <mat-tab class="rewardsHistoryTab" [label]="screen.rewardHistoryLabel" responsive-class>
-                <mat-card class="rewardsHistoryContent">
-                    Reward History Content
-                </mat-card>
-            </mat-tab>
         </mat-tab-group>
     </div>
 </div>
 <mat-dialog-actions align="end" class="buttons">
-    <app-secondary-button responsive-class
-                          class="edit"
-                          *ngIf="screen.editButton"
-                          [actionItem]="screen.editButton"
-                          (actionClick)="doAction(screen.editButton)"
-                          (click)="doAction(screen.editButton)">
-        <span>{{screen.editButton.title}}</span>
-    </app-secondary-button>
     <app-secondary-button responsive-class
                           class="unlink"
                           *ngIf="screen.unlinkButton"
@@ -70,6 +57,14 @@
                           (actionClick)="doAction(screen.unlinkButton)"
                           (click)="doAction(screen.unlinkButton)">
         <span>{{screen.unlinkButton.title}}</span>
+    </app-secondary-button>
+    <app-secondary-button responsive-class
+                          class="edit"
+                          *ngIf="screen.editButton"
+                          [actionItem]="screen.editButton"
+                          (actionClick)="doAction(screen.editButton)"
+                          (click)="doAction(screen.editButton)">
+        <span>{{screen.editButton.title}}</span>
     </app-secondary-button>
     <app-primary-button responsive-class
                         class="done"

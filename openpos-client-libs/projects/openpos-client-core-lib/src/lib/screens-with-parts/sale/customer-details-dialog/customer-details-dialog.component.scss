@@ -15,10 +15,14 @@
     .no-items {
       @extend %text-lg;
       text-align: center;
+      &.mobile {
+        @extend %text-md;
+        padding-top: 10px;
+      }
     }
   }
   &.mobile {
-    height: 60vmin;
+    height: 55vmin;
   }
 }
 
@@ -111,7 +115,8 @@ app-content-card {
   }
 
   .memberships {
-    padding-top: 5px;
+    padding-top: 10px;
+    padding-bottom: 5px;
     display: inline-block;
   }
 
@@ -133,5 +138,11 @@ app-content-card {
 
 .memberships {
   grid-area: memberships;
+}
+
+.no-promotions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 

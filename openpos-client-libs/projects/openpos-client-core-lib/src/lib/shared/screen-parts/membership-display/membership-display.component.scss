@@ -1,5 +1,14 @@
+@import "../../../styles/mixins/typography";
+
 mat-chip {
   text-transform: uppercase;
+  &.tablet-portrait {
+    font-size: $text-xs-mobile*1.75;
+  }
+
+  &.mobile {
+    font-size: $text-xs-mobile*1.25;
+  }
 }
 
 .mat-chip-list-wrapper {
