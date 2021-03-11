@@ -1,70 +1,55 @@
 <app-dialog-header></app-dialog-header>
-<mat-dialog-content>
-    <app-content-card>
-        <div class="grid-container">
+<div>
+    <app-content-card class="details-wrapper" >
+        <div class="grid-container" [ngClass]="{'grid-container': !(isMobile | async), 'mobile-grid-container': (isMobile | async)}">
             <div class="icon">
-                <app-icon [iconName]="'account_circle'" [iconClass]="'material-icons'"></app-icon>
+                <app-icon [iconName]="'account_circle'" [iconClass]="'material-icons ' + ((isMobile | async) ? 'mat-64' : '')"></app-icon>
             </div>
             <div class="details">
                 <div class="customer-name">
                     {{screen.customer.name}}
                 </div>
-                <div class="customer-details muted-color">
-                    <div class="details-row email">
-                        <app-icon [iconName]="'mail_outline'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.email}}
-                    </div>
-                    <div class="details-row phone-number">
-                        <app-icon [iconName]="'phone'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.phoneNumber | phone}}
-                    </div>
-                    <div class="details-row loyalty-number">
-                        <app-icon [iconName]="'account_heart'" [iconClass]="'material-icons mat-18'"></app-icon> {{screen.customer.loyaltyNumber}}
-                    </div>
-                    <div class="details-row address">
-                        <app-icon [iconName]="'place'" [iconClass]="'material-icons mat-18'"></app-icon>
-                        <div class="address-details">
-                            <div *ngIf="screen.customer.address.line1" class="line1">{{screen.customer.address.line1}}</div>
-                            <div *ngIf="screen.customer.address.line2" class="line2">{{screen.customer.address.line2}}</div>
-                            <div class="line3">
-                                <span *ngIf="screen.customer.address.city" class="city">{{screen.customer.address.city}}, </span>
-                                <span *ngIf="screen.customer.address.state" class="state">{{screen.customer.address.state}} </span>
-                                <span *ngIf="screen.customer.address.postalCode" class="postal-code">{{screen.customer.address.postalCode}}</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="customer-details muted-color" *ngIf="!(isMobile | async)">
+                    <app-customer-information [customer]="screen.customer"></app-customer-information>
                 </div>
             </div>
             <div class="memberships" *ngIf="screen.membershipEnabled">
                 <div class="wrapper">
-                    <div class="title">
+                    <div class="title" *ngIf="!(isMobile | async)">
                         <app-icon [iconName]="'card_account_details'" [iconClass]="'material-icons mat-24'"></app-icon> {{screen.membershipLabel}}
                     </div>
                     <div class="list">
-                        <div *ngFor="let membership of screen.customer.memberships" class="item">
+                        <span *ngFor="let membership of screen.customer.memberships" class="item">
                             <app-membership-display [membership]="membership"></app-membership-display>
-                        </div>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
     </app-content-card>
-</mat-dialog-content>
+    <div class="tabs" [ngClass]="{'tabs': true, 'mobile': (isMobile | async)}" responsive-class>
+        <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
+            <mat-tab class="contactTab" [label]="screen.contactLabel" *ngIf="isMobile | async">
+                <mat-card class="customer-details muted-color">
+                    <app-customer-information [customer]="screen.customer"></app-customer-information>
+                </mat-card>
+            </mat-tab>
+            <mat-tab class="rewardsTab" [label]="getRewardsLabel()">
+                <mat-card [ngClass]="{'rewardsContent': true, 'no-promotions': !(screen.customer.rewards && screen.customer.rewards.length)}">
+                    <div *ngIf="(screen.customer.rewards && screen.customer.rewards.length)" >
+                        <div *ngFor="let reward of screen.customer.rewards" class="line">
+                            <app-rewards-line-item [reward]="reward"></app-rewards-line-item>
+                        </div>
+                    </div>
+                    <div *ngIf="!(screen.customer.rewards && screen.customer.rewards.length)" class="no-items" responsive-class>
+                        {{screen.noPromotionsText}}
+                    </div>
+                </mat-card>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
 <mat-dialog-actions align="end" class="buttons">
-    <app-secondary-button responsive-class
-                          class="edit"
-                          *ngIf="screen.editButton"
-                          [actionItem]="screen.editButton"
-                          (actionClick)="doAction(screen.editButton)"
-                          (click)="doAction(screen.editButton)">
-        <span>{{screen.editButton.title}}</span>
-    </app-secondary-button>
-    <app-secondary-button responsive-class
-                          class="loyalty-promotion"
-                          *ngIf="screen.loyaltyPromotions"
-                          [actionItem]="screen.loyaltyPromotions"
-                          (actionClick)="doAction(screen.loyaltyPromotions)"
-                          (click)="doAction(screen.loyaltyPromotions)">
-        <span>{{screen.loyaltyPromotions.title}}</span>
-    </app-secondary-button>
     <app-secondary-button responsive-class
                           class="unlink"
                           *ngIf="screen.unlinkButton"
@@ -72,6 +57,14 @@
                           (actionClick)="doAction(screen.unlinkButton)"
                           (click)="doAction(screen.unlinkButton)">
         <span>{{screen.unlinkButton.title}}</span>
+    </app-secondary-button>
+    <app-secondary-button responsive-class
+                          class="edit"
+                          *ngIf="screen.editButton"
+                          [actionItem]="screen.editButton"
+                          (actionClick)="doAction(screen.editButton)"
+                          (click)="doAction(screen.editButton)">
+        <span>{{screen.editButton.title}}</span>
     </app-secondary-button>
     <app-primary-button responsive-class
                         class="done"

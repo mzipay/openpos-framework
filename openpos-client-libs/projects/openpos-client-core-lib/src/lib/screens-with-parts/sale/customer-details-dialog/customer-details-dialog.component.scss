@@ -1,9 +1,29 @@
 @import "../../../styles/mixins/typography";
 
-mat-dialog-content {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
+.details-wrapper, .tabs {
+  margin-bottom: 8px;
+}
+
+.tabs {
+  margin-top: 8px;
+  height: 40vmin;
+  mat-tab-group, mat-card {
+    height: 100%;
+  }
+  mat-card {
+    overflow: scroll;
+    .no-items {
+      @extend %text-lg;
+      text-align: center;
+      &.mobile {
+        @extend %text-md;
+        padding-top: 10px;
+      }
+    }
+  }
+  &.mobile {
+    height: 55vmin;
+  }
 }
 
 .buttons {
@@ -12,81 +32,117 @@ mat-dialog-content {
   justify-content: end;
   grid-column-gap: 8px;
 }
+
 app-content-card {
   section {
     padding-left: 0px;
     padding-right: 0px;
   }
 }
+
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 3fr 4fr;
   grid-template-rows: 1fr;
   gap: 0px 0px;
   grid-template-areas:
-    "icon details details details memberships memberships memberships memberships";
+    "icon details memberships";
+  .icon {
+    justify-content: center;
+    display: flex;
+    app-icon {
+      margin-left: -16px;
+    }
+    .material-icons {
+      font-size: 90px;
+      height: 90px;
+      width: 90px;
+    }
+  }
+  .details {
+    .customer-name {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  }
+  .memberships {
+    padding-bottom: 10px;
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+      "title list";
+      height: 100%;
+      border-radius: 3px;
+      .title {
+        padding-top: 20px;
+        padding-left: 30px;
+        grid-area: title;
+        app-icon {
+          display: inline-block;
+          margin-right: 5px;
+        }
+      }
+      .list {
+        padding-top: 20px;
+        grid-area: list;
+        .item {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
 }
+
+.mobile-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 10fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "icon details"
+    "memberships memberships";
+
+  .details {
+    .customer-name {
+      @extend %text-md;
+      height: 100%;
+      padding-top: 16px;
+      padding-left: 5px;
+    }
+  }
+
+  .memberships {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    display: inline-block;
+  }
+
+  .contactTab {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+
+
 .icon {
   grid-area: icon;
-  justify-content: center;
-  display: flex;
-  app-icon {
-    margin-left: -16px;
-  }
-  .material-icons {
-    font-size: 90px;
-    height: 90px;
-    width: 90px;
-  }
 }
+
 .details {
   grid-area: details;
-  .customer-name {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  .customer-details {
-    .material-icons {
-      display: inline-block;
-      margin-right: 5px;
-
-    }
-    .details-row {
-      margin-top: 10px;
-    }
-    .address-details {
-      display: inline-grid;
-    }
-  }
 }
+
 .memberships {
   grid-area: memberships;
-  padding-bottom: 10px;
-  .wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-      "title list";
-    height: 100%;
-    border-radius: 3px;
-    .title {
-      padding-top: 20px;
-      padding-left: 30px;
-      grid-area: title;
-      app-icon {
-        display: inline-block;
-        margin-right: 5px;
-      }
-    }
-    .list {
-      padding-top: 20px;
-      grid-area: list;
-      .item {
-        margin-bottom: 10px;
-      }
-    }
-  }
-
 }
+
+.no-promotions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+

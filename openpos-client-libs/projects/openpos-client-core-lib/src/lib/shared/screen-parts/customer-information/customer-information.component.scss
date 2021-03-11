@@ -1,7 +1,11 @@
 @import "../../../styles/mixins/typography";
 
-mat-chip {
-  text-transform: uppercase;
+.material-icons {
+  display: inline-block;
+  margin-right: 5px;
+}
+.details-row {
+  margin-top: 10px;
   &.tablet-portrait {
     font-size: $text-xs-mobile*1.75;
   }
@@ -10,7 +14,6 @@ mat-chip {
     font-size: $text-xs-mobile*1.25;
   }
 }
-
-.mat-chip-list-wrapper {
-  margin:0px;
+.address-details {
+  display: inline-grid;
 }
