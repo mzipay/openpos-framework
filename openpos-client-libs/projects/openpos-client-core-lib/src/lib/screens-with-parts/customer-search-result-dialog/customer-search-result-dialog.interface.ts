@@ -1,6 +1,7 @@
 import {IAbstractScreen} from "../../core/interfaces/abstract-screen.interface";
 import {IActionItem} from "../../core/actions/action-item.interface";
 import {Membership} from "../../shared/screen-parts/membership-display/memebership-display.interface";
+import {SelectableItemInterface} from "../selection-list/selectable-item.interface";
 
 export interface CustomerSearchResultDialogInterface extends IAbstractScreen {
     instructions: String;
@@ -9,7 +10,7 @@ export interface CustomerSearchResultDialogInterface extends IAbstractScreen {
     results: ICustomerDetails[]
 }
 
-export interface ICustomerDetails {
+export interface ICustomerDetails extends SelectableItemInterface{
     name: string,
     loyaltyNumber: string,
     phoneNumber: string,

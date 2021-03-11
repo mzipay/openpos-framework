@@ -11,7 +11,7 @@ import { ElectronService } from "ngx-electron";
 import { CLIENTCONTEXT } from "../../../core/client-context/client-context-provider.interface";
 import { TimeZoneContext } from "../../../core/client-context/time-zone-context";
 import { By } from "@angular/platform-browser";
-import { Membership } from "../../screen-parts/membership-display/memebership-display.interface";
+import { Membership } from "../membership-display/memebership-display.interface";
 
 class MockMatDialog {};
 class MockElectronService {};

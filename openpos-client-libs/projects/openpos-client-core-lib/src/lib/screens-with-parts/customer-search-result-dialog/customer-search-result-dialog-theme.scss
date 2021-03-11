@@ -10,19 +10,22 @@
     padding: 5px 0px 5px 0px !important;
   }
 
-  .mat-standard-chip{
-    min-height: 1rem !important;
-    padding-left: .5rem !important;
-    padding-right: .5rem !important;
-    white-space: nowrap;
-  }
-
   .content {
     padding: 0px;
   }
 
-  .mat-dialog-content{
-    margin: 0px;
-    padding: 0px 5px 0px 5px;
+  .customer-memberships{
+    .mat-standard-chip{
+      min-height: 1rem !important;
+      padding-left: .5rem !important;
+      padding-right: .5rem !important;
+      white-space: nowrap;
+    }
+
+    .mat-dialog-content{
+      margin: 0px;
+      padding: 0px 5px 0px 5px;
+    }
   }
+
 }

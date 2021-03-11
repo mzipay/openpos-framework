@@ -167,7 +167,7 @@ import { StatusDetailsItemComponent } from './status/status-details/item/status-
 import { StatusBarComponent } from './status/status-bar/status-bar.component';
 import { LocalizePipe } from './pipes/localize.pipe';
 import { ModalOverlayContainerDirective } from './modal-overlay-container/modal-overlay-container.directive';
-import { DisplayCustomerLookupComponent } from "./components/display-customer-lookup/display-customer-lookup.component";
+import { DisplayCustomerLookupComponent } from "./screen-parts/display-customer-lookup/display-customer-lookup.component";
 import { MembershipDisplayComponent } from "./screen-parts/membership-display/membership-display.component";
 import { ImageScannerComponent } from '../core/platform-plugins/barcode-scanners/image-scanner.component';
 

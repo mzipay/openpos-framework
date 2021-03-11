@@ -8,9 +8,9 @@ import org.jumpmind.pos.core.ui.UIMessage;
 public class CustomerSearchResultUIMessage extends UIMessage {
 
     private static final long serialVersionUID = 1L;
-    private List<UICustomerDetails> results;
+    private List<UICustomerDetailsItem> results;
     private ActionItem selectButton;
-    private ActionItem viewButton;
+    private ActionItem editButton;
     private String instructions;
 
     public CustomerSearchResultUIMessage(){

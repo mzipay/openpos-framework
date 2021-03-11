@@ -1,6 +1,4 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {CustomerSearchResultDialogComponent} from './customer-search-result-dialog.component';
-import {ICustomerDetails} from "./customer-search-result-dialog.interface";
 import {NO_ERRORS_SCHEMA} from '@angular/core'
 import {ActionService} from "../../core/actions/action.service";
 import {IActionItem} from "../../core/actions/action-item.interface";
@@ -11,9 +9,12 @@ import {CLIENTCONTEXT} from "../../core/client-context/client-context-provider.i
 import {TimeZoneContext} from "../../core/client-context/time-zone-context";
 import {MatDialog} from "@angular/material";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {SelectionMode} from "openpos-client-core-lib";
 import {compilePipeFromMetadata} from "@angular/compiler";
 import {SelectableItemListComponentConfiguration} from "../../shared/components/selectable-item-list/selectable-item-list.component";
+import {SelectionListScreenComponent} from "./selection-list-screen.component";
+import {ISelectionListItem} from "./selection-list-item.interface";
+import {SelectionMode} from "../../core/interfaces/selection-mode.enum";
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 class MockActionService {
     doAction(action: IActionItem){}
@@ -22,17 +23,17 @@ class MockMatDialog {};
 class MockElectronService {};
 class ClientContext {};
 
-describe('CustomerSearchResultDialogComponent', () => {
-    let component: CustomerSearchResultDialogComponent;
-    let fixture: ComponentFixture<CustomerSearchResultDialogComponent>;
+describe('SelectionListScreenComponent', () => {
+    let component: SelectionListScreenComponent;
+    let fixture: ComponentFixture<SelectionListScreenComponent>;
 
     let testAddress = {line1: 'testStreet', line2: 'testStreetLine2', city: 'testCity', state: 'testState', postalCode: '12345'};
-    let testCustomer = {name: 'test', loyaltyNumber: '7327', email: 'testUser@test.com',
-        phoneNumber: '614 234 5678', address: testAddress, enabled: true, selected: false} as ICustomerDetails;
-    let testCustomerDisabled = {...testCustomer} as ICustomerDetails;
+    let testCustomer = {enabled: true, selected: false} as ISelectionListItem;
+    let testCustomerDisabled = {...testCustomer} as ISelectionListItem;
     testCustomerDisabled.enabled = false;
     let threeResults = [testCustomer, testCustomer, testCustomerDisabled];
     let fourResults = [testCustomer, testCustomer, testCustomerDisabled, testCustomer];
+
 
     describe('non mobile', () => {
         beforeEach( () => {
@@ -40,7 +41,8 @@ describe('CustomerSearchResultDialogComponent', () => {
             TestBed.configureTestingModule({
                 imports: [ HttpClientTestingModule ],
                 declarations: [
-                    CustomerSearchResultDialogComponent,
+                    SelectionListScreenComponent,
+                    ImageUrlPipe
                 ],
                 providers: [
                     { provide: ActionService, useClass: MockActionService },
@@ -53,9 +55,9 @@ describe('CustomerSearchResultDialogComponent', () => {
                     NO_ERRORS_SCHEMA,
                 ]
             }).compileComponents();
-            fixture = TestBed.createComponent(CustomerSearchResultDialogComponent);
+            fixture = TestBed.createComponent(SelectionListScreenComponent);
             component = fixture.componentInstance;
-            component.screen = {nonSelectionButtons: [{title: 'NOTSHOWN'}], selectionButtons: [{title: 'Select'}, {title: 'View'}] } as SelectionListInterface<ICustomerDetails>;
+            component.screen = {nonSelectionButtons: [{title: 'NOTSHOWN'}], selectionButtons: [{title: 'Select'}, {title: 'View'}] } as SelectionListInterface<ISelectionListItem>;
             fixture.detectChanges();
         });
 
@@ -65,9 +67,9 @@ describe('CustomerSearchResultDialogComponent', () => {
 
         describe('component', () => {
             beforeEach(() => {
-                fixture = TestBed.createComponent(CustomerSearchResultDialogComponent);
+                fixture = TestBed.createComponent(SelectionListScreenComponent);
                 component = fixture.componentInstance;
-                component.screen = {nonSelectionButtons: [{title: 'NOTSHOWN'}], selectionButtons: [{title: 'Select'}, {title: 'View'}] } as SelectionListInterface<ICustomerDetails>;
+                component.screen = {nonSelectionButtons: [{title: 'NOTSHOWN'}], selectionButtons: [{title: 'Select'}, {title: 'View'}] } as SelectionListInterface<ISelectionListItem>;
                 fixture.detectChanges();
             });
             it('transformResultsToMap',(done) => {
@@ -82,10 +84,10 @@ describe('CustomerSearchResultDialogComponent', () => {
                         expect(result.items.get(0)).toBe(testCustomer);
                         expect(result.disabledItems.get(2)).toBe(testCustomerDisabled)
                         done();
-                        },
+                    },
                     () => {fail(); done();},
                     () => {fail(); done();}
-                    );
+                );
                 // expect(result.size).toBe(3);
                 // expect(result.get(0)).toBe(component.screen.selectionList[0]);
                 // expect(result.get(2)).toBe(component.screen.selectionList[2]);
@@ -97,7 +99,7 @@ describe('CustomerSearchResultDialogComponent', () => {
                 component.buildScreen();
                 expect(component.selectedItems).toBeUndefined();
 
-                let nonSelectedCustomer = {...testCustomer} as ICustomerDetails;
+                let nonSelectedCustomer = {...testCustomer} as ISelectionListItem;
                 nonSelectedCustomer.selected = true;
                 let listIn = [testCustomer, nonSelectedCustomer]
                 component.screen.selectionList = listIn
