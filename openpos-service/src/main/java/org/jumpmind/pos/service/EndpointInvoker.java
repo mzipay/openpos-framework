@@ -156,7 +156,7 @@ public class EndpointInvoker implements InvocationHandler {
             }
             else {
                 implMatchedOverrides = pathMatchedOverrides.stream()
-                        .filter(entry -> entry.getValue().implementation().equals(Endpoint.IMPLEMENTATION_DEFAULT))
+                        .filter(entry -> entry.getValue().implementation().equals("default"))
                         .collect(Collectors.toList());
             }
 
