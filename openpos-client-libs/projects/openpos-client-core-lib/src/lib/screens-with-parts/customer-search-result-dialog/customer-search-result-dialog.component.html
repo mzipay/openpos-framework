@@ -3,8 +3,13 @@
 <app-content-card>
     <mat-dialog-content>
         <div class="dialog-content">
-            <app-selectable-item-list fxFlex="0 1 100%" [listData]="listData" [configuration]="listConfig"
-                                      (selectedItemChange)="onItemChange($event)">
+            <app-selectable-item-list *ngIf="screen.selectionList"
+                                      [listData]="listData" [configuration]="listConfig"
+                                      [defaultSelect]="screen.defaultSelect"
+                                      [selectedItemList]="selectedItems"
+                                      [selectedItem]="selectedItem"
+                                      (selectedItemChange)="onItemChange($event)"
+                                      (selectedItemListChange)="onItemListChange($event)">
                 <ng-template let-item>
                     <app-display-customer-lookup [customer]="item"></app-display-customer-lookup>
                 </ng-template>

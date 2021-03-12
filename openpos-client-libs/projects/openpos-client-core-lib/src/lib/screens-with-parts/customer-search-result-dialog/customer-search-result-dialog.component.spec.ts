@@ -12,7 +12,6 @@ import {TimeZoneContext} from "../../core/client-context/time-zone-context";
 import {MatDialog} from "@angular/material";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {SelectionMode} from "openpos-client-core-lib";
-import {compilePipeFromMetadata} from "@angular/compiler";
 import {SelectableItemListComponentConfiguration} from "../../shared/components/selectable-item-list/selectable-item-list.component";
 
 class MockActionService {

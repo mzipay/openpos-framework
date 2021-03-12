@@ -2,7 +2,9 @@ import { SelectionListItemDisplayProperty } from './selection-list-item-display-
 import {SelectableItemInterface} from "./selectable-item.interface";
 
 
-export interface ISelectionListItem extends SelectableItemInterface {
+export class ISelectionListItem implements SelectableItemInterface {
+    enabled: boolean;
+    selected: boolean;
     title: string;
     properties: SelectionListItemDisplayProperty[];
     itemImageUrl: string;

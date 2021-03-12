@@ -12,6 +12,12 @@
     margin-right: 2rem;
     padding-bottom: .5em;
   }
+  .customer-email-phone{
+    .customer-email{
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
 
   .customer-name-loyaltyNumber {
     grid-area: customerInfoHeader;

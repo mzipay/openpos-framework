@@ -1,7 +1,6 @@
 package org.jumpmind.pos.core.ui.message;
 
 public final class UIMessageType {
-    public static String CUSTOMER_SEARCH_RESULT = "CustomerSearchResultDialog";
     public static String SALE = "Sale";
     public static String SELECTION_LIST = "SelectionList";
     public static String RETURN = "Return";
