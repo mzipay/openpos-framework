@@ -13,7 +13,7 @@ import {KeyPressProvider} from "../../providers/keypress.provider";
 import {validateDoesNotExist, validateExist, validateIcon, validateText} from "../../../utilites/test-utils";
 import {IActionItem} from "../../../core/actions/action-item.interface";
 import {By} from "@angular/platform-browser";
-import {Reward} from "./rewards-line-item.interface";
+import {Reward, RewardsLineItemComponentInterface} from "./rewards-line-item.interface";
 
 class MockActionService {};
 class MockMatDialog {};
@@ -63,6 +63,9 @@ describe('RewardsLineItemComponent', () => {
             fixture = TestBed.createComponent(RewardsLineItemComponent);
             component = fixture.componentInstance;
             component.reward = {} as Reward;
+            component.screenData = {
+                expiresLabel: "Expires"
+            } as RewardsLineItemComponentInterface;
             fixture.detectChanges();
         });
 
@@ -105,10 +108,10 @@ describe('RewardsLineItemComponent', () => {
                     });
 
                     it('renders the expirationLabel', () => {
-                        component.reward.expirationLabel = 'a label';
+                        component.screenData.expiresLabel = 'a label';
                         fixture.detectChanges();
 
-                        validateText(fixture, '.details .expiration', component.reward.expirationLabel);
+                        validateText(fixture, '.details .expiration', component.screenData.expiresLabel);
                     });
                 });
             });
@@ -185,6 +188,9 @@ describe('RewardsLineItemComponent', () => {
             fixture = TestBed.createComponent(RewardsLineItemComponent);
             component = fixture.componentInstance;
             component.reward = {} as Reward;
+            component.screenData = {
+                expiresLabel: "Expires"
+            } as RewardsLineItemComponentInterface;
             fixture.detectChanges();
         });
         describe('template', () => {
@@ -222,6 +228,9 @@ describe('RewardsLineItemComponent', () => {
             fixture = TestBed.createComponent(RewardsLineItemComponent);
             component = fixture.componentInstance;
             component.reward = {} as Reward;
+            component.screenData = {
+                expiresLabel: "Expires"
+            } as RewardsLineItemComponentInterface;
             fixture.detectChanges();
         });
         describe('template', () => {
