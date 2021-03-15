@@ -11,9 +11,8 @@ import {CLIENTCONTEXT} from "../../core/client-context/client-context-provider.i
 import {TimeZoneContext} from "../../core/client-context/time-zone-context";
 import {MatDialog} from "@angular/material";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {SelectionMode} from "openpos-client-core-lib";
-import {compilePipeFromMetadata} from "@angular/compiler";
 import {SelectableItemListComponentConfiguration} from "../../shared/components/selectable-item-list/selectable-item-list.component";
+import {SelectionMode} from "../../core/interfaces/selection-mode.enum";
 
 class MockActionService {
     doAction(action: IActionItem){}

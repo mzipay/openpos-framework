@@ -9,7 +9,6 @@ import {CLIENTCONTEXT} from "../../core/client-context/client-context-provider.i
 import {TimeZoneContext} from "../../core/client-context/time-zone-context";
 import {MatDialog} from "@angular/material";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {compilePipeFromMetadata} from "@angular/compiler";
 import {SelectableItemListComponentConfiguration} from "../../shared/components/selectable-item-list/selectable-item-list.component";
 import {SelectionListScreenComponent} from "./selection-list-screen.component";
 import {ISelectionListItem} from "./selection-list-item.interface";
@@ -21,7 +20,6 @@ class MockActionService {
 };
 class MockMatDialog {};
 class MockElectronService {};
-class ClientContext {};
 
 describe('SelectionListScreenComponent', () => {
     let component: SelectionListScreenComponent;

@@ -11,6 +11,8 @@ export interface CustomerSearchResultDialogInterface extends IAbstractScreen {
 }
 
 export interface ICustomerDetails extends SelectableItemInterface{
+    selected: boolean;
+    enabled: boolean;
     name: string,
     loyaltyNumber: string,
     phoneNumber: string,
