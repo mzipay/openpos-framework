@@ -46,6 +46,18 @@
                     </div>
                 </mat-card>
             </mat-tab>
+            <mat-tab class="rewardsHistoryTab" [label]="screen.rewardHistoryLabel">
+                <mat-card [ngClass]="{'rewardsHistoryContent': true, 'no-promotions': !(screen.customer.rewardHistory && screen.customer.rewardHistory.length)}">
+                    <div *ngIf="(screen.customer.rewardHistory && screen.customer.rewardHistory.length)" >
+                        <div *ngFor="let reward of screen.customer.rewardHistory" class="line">
+                            <app-rewards-history-line-item [reward]="reward"></app-rewards-history-line-item>
+                        </div>
+                    </div>
+                    <div *ngIf="!(screen.customer.rewardHistory && screen.customer.rewardHistory.length)" class="no-items" responsive-class>
+                        {{screen.noPromotionsText}}
+                    </div>
+                </mat-card>
+            </mat-tab>
         </mat-tab-group>
     </div>
 </div>

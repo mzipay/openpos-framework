@@ -1,0 +1,7 @@
+@mixin reward-history-line-items-theme($theme) {
+    $primary: mat-color(map-get($theme, primary));
+
+    .status {
+        color: $primary;
+    }
+}
