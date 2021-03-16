@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core'
 import {CustomerDetailsDialogComponent} from "./customer-details-dialog.component";
 import {CustomerDetailsDialogInterface} from "./customer-details-dialog.interface";
 import {ActionService} from "../../../core/actions/action.service";
-import {validateDoesNotExist, validateExist} from "../../../utilites/test-utils";
+import {validateDoesNotExist, validateExist, validateText} from "../../../utilites/test-utils";
 import {By} from "@angular/platform-browser";
 import {IActionItem} from "../../../core/actions/action-item.interface";
 import {PhonePipe} from "../../../shared/pipes/phone.pipe";
@@ -139,32 +139,48 @@ describe('CustomerDetailsDialog', () => {
           });
         });
         describe('when membership is enabled', () => {
-          let memberships;
-          beforeEach(() => {
-            memberships = [
-              {}, {}, {}
-            ]
-            component.screen.customer.memberships = memberships;
-            component.screen.membershipEnabled = true;
-            fixture.detectChanges();
+          describe('when there are memberships', () => {
+            let memberships;
+            beforeEach(() => {
+              memberships = [
+                {}, {}, {}
+              ]
+              component.screen.customer.memberships = memberships;
+              component.screen.membershipEnabled = true;
+              fixture.detectChanges();
+            });
+
+            it('renders the details section', () => {
+              const membershipDetailsElement = fixture.debugElement.query(By.css('.memberships'));
+              expect(membershipDetailsElement.nativeElement).toBeDefined();
+            });
+
+            it('shows the membership label', () => {
+              component.screen.membershipLabel = 'some value';
+              fixture.detectChanges();
+              const membershipLabelElement = fixture.debugElement.query(By.css('.memberships .title'));
+              expect(membershipLabelElement.nativeElement.textContent).toContain(component.screen.membershipLabel);
+            });
+
+            it('shows a membership-display component for each membership', () => {
+              const membershipDisplayComponents = fixture.debugElement.queryAll(By.css('app-membership-display'));
+              expect(membershipDisplayComponents.length).toBe(memberships.length);
+            });
           });
 
-          it('renders the details section', () => {
-            const membershipDetailsElement = fixture.debugElement.query(By.css('.memberships'));
-            expect(membershipDetailsElement.nativeElement).toBeDefined();
+          describe('when there are no memberships', () => {
+            beforeEach(() => {
+              component.screen.customer.memberships = [];
+              component.screen.membershipEnabled = true;
+              component.screen.noMembershipsFoundLabel = 'no memberships yet';
+              fixture.detectChanges();
+            });
+
+            it('shows the noMembershipsFound label', () => {
+              validateText(fixture, '.memberships .list', component.screen.noMembershipsFoundLabel);
+            });
           });
 
-          it('shows the membership label', () => {
-            component.screen.membershipLabel = 'some value';
-            fixture.detectChanges();
-            const membershipLabelElement = fixture.debugElement.query(By.css('.memberships .title'));
-            expect(membershipLabelElement.nativeElement.textContent).toContain(component.screen.membershipLabel);
-          });
-
-          it('shows a membership-display component for each membership', () => {
-            const membershipDisplayComponents = fixture.debugElement.queryAll(By.css('app-membership-display'));
-            expect(membershipDisplayComponents.length).toBe(memberships.length);
-          });
         });
       })
       describe('tabs', () => {
