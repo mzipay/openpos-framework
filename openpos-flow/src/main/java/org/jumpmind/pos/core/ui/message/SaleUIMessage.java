@@ -33,6 +33,7 @@ public class SaleUIMessage extends UIMessage {
     private String loyaltyIDLabel;
     private List<UIMembership> memberships;
     private boolean membershipEnabled;
+    private String noMembershipsFoundLabel;
     private ActionItem mobileLoyaltyButton;
     private ActionItem linkedCustomerButton;
     private ActionItem linkedEmployeeButton;

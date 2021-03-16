@@ -44,6 +44,11 @@
                             <div *ngFor="let membership of screenData.memberships">
                                 <app-membership-display (clickEvent)="doAction(screenData.linkedCustomerButton)" [membership]="membership"></app-membership-display>
                             </div>
+                            <div *ngIf="!(screenData.memberships && screenData.memberships.length)">
+                            <span>
+                                {{screenData.noMembershipsFoundLabel}}
+                            </span>
+                            </div>
                         </div>
                     </div>
                 </div>

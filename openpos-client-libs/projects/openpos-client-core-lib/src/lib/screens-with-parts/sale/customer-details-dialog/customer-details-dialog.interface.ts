@@ -15,4 +15,5 @@ export interface CustomerDetailsDialogInterface extends IAbstractScreen {
     rewardsLabel: string;
     rewardHistoryLabel: string;
     noPromotionsText: string;
+    noMembershipsFoundLabel: string;
 }
