@@ -50,6 +50,22 @@ public final class AppUtils {
         }
         return null;
     }
+
+    public static int getAvailableProcessors() {
+        int numberOfCores = -1;
+        try {
+            numberOfCores = Runtime.getRuntime().availableProcessors();
+            if (numberOfCores > 0) {
+                return numberOfCores;
+            } else {
+                log.warn("Number of cores reported: " + numberOfCores + " - defaulting to 1");
+                return 1;
+            }
+        } catch (Exception ex) {
+            log.warn("Failed to determine number of cores on this system.", ex);
+            return 1;
+        }
+    }
     
     public static String getHostName() {
         if (HOST_NAME.get() == null) {
