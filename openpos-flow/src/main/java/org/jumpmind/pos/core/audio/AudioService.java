@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Component
 @Scope("device")
@@ -34,10 +36,17 @@ public class AudioService implements IAudioService {
         play(AudioRequest.builder().sound(sound).build());
     }
 
+    @PostConstruct
+    public void init() {
+        if (!enableAudio) {
+            log.info("Audio is disabled on device, so sounds will not be played");
+        }
+    }
+
     @Override
     public void play(AudioRequest request) {
         if (!enableAudio) {
-            log.warn("Audio is disabled on device '{}', so the sound '{}' will not be played", stateManager.getDeviceId(), request.getSound());
+            log.debug("Audio is disabled on device '{}', so the sound '{}' will not be played", stateManager.getDeviceId(), request.getSound());
             return;
         }
 
@@ -54,7 +63,7 @@ public class AudioService implements IAudioService {
         AudioMessage message = new AudioMessage(requestCopy);
 
 
-        log.info(String.format("Sending sound '%s' to be played on device '%s'", url, stateManager.getDeviceId()), message);
+        log.debug(String.format("Sending sound '%s' to be played on device '%s'", url, stateManager.getDeviceId()), message);
         messageService.sendMessage(stateManager.getAppId(), stateManager.getDeviceId(), new AudioMessage(requestCopy));
     }
 }
