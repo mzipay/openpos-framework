@@ -5,6 +5,6 @@
         <div class="expiration" responsive-class><app-icon [iconName]="'access_time'" [iconClass]="'material-icons ' + (isMobile | async) ? 'mat-16' : 'mat-24'"></app-icon>{{screenData.expiredLabel}} {{reward.expirationDate}}</div>
     </div>
     <div class="status" >
-        <span>{{(reward.redeemed) ? screenData.redeemedLabel : screenData.expiredLabel}}</span>
+        <span responsive-class>{{(reward.redeemed) ? screenData.redeemedLabel : screenData.expiredLabel}}</span>
     </div>
 </div>
