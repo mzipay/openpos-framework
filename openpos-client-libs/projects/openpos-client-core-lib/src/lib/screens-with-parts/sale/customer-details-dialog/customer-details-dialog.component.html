@@ -19,9 +19,16 @@
                         <app-icon [iconName]="'card_account_details'" [iconClass]="'material-icons mat-24'"></app-icon> {{screen.membershipLabel}}
                     </div>
                     <div class="list">
-                        <span *ngFor="let membership of screen.customer.memberships" class="item">
-                            <app-membership-display [membership]="membership"></app-membership-display>
-                        </span>
+                        <div *ngIf="screen.customer.memberships && screen.customer.memberships.length">
+                            <span *ngFor="let membership of screen.customer.memberships" class="item">
+                                <app-membership-display [membership]="membership"></app-membership-display>
+                            </span>
+                        </div>
+                        <div *ngIf="!(screen.customer.memberships && screen.customer.memberships.length)">
+                            <span>
+                                {{screen.noMembershipsFoundLabel}}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

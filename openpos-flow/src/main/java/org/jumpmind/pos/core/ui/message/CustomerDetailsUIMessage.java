@@ -25,6 +25,7 @@ public class CustomerDetailsUIMessage extends UIMessage {
     private String rewardHistoryLabel;
     private String expiredLabel;
     private String redeemedLabel;
+    private String noMembershipsFoundLabel;
 
     public CustomerDetailsUIMessage() {
         setScreenType(UIMessageType.CUSTOMER_DETAILS_DIALOG);
