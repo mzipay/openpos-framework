@@ -172,6 +172,7 @@ import { MembershipDisplayComponent } from "./screen-parts/membership-display/me
 import { ImageScannerComponent } from '../core/platform-plugins/barcode-scanners/image-scanner.component';
 import {RewardsLineItemComponent} from "./screen-parts/rewards-line-item/rewards-line-item.component";
 import { CustomerInformationComponent } from './screen-parts/customer-information/customer-information.component';
+import {RewardsHistoryLineItemComponent} from "./screen-parts/rewards-history-line-item/rewards-history-line-item.component";
 
 const screenParts = [
     TenderPartComponent,
@@ -189,6 +190,7 @@ const screenParts = [
     MembershipDisplayComponent,
     CustomerInformationComponent,
     RewardsLineItemComponent,
+    RewardsHistoryLineItemComponent,
     ProgressBarPartComponent,
     WebcamViewerComponent,
     SystemStatusComponent,

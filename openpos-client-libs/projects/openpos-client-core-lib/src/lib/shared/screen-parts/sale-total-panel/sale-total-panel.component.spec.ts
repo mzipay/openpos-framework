@@ -15,7 +15,7 @@ import {IActionItem} from "../../../core/actions/action-item.interface";
 import {By} from "@angular/platform-browser";
 import {Configuration} from "../../../configuration/configuration";
 import {ImageUrlPipe} from "../../pipes/image-url.pipe";
-import {validateDoesNotExist} from "../../../utilites/test-utils";
+import {validateDoesNotExist, validateText} from "../../../utilites/test-utils";
 
 class MockMatDialog {};
 class MockActionService {};
@@ -250,24 +250,41 @@ describe('SaleTotalPanelComponent', () => {
                         });
 
                         describe('when membershipEnabled is true', () => {
-                            beforeEach(() => {
-                                component.screenData.membershipEnabled = true;
-                                component.screenData.memberships = [
-                                    { id: '123', name: 'membership1', member: true},
-                                    { id: '124', name: 'membership2', member: false},
-                                    { id: '125', name: 'membership3', member: false},
-                                ]
-                                fixture.detectChanges();
+                            describe('when there are memberships', () => {
+                                beforeEach(() => {
+                                    component.screenData.membershipEnabled = true;
+                                    component.screenData.memberships = [
+                                        { id: '123', name: 'membership1', member: true},
+                                        { id: '124', name: 'membership2', member: false},
+                                        { id: '125', name: 'membership3', member: false}
+                                    ];
+                                    fixture.detectChanges();
+                                });
+
+                                it('does not display the loyalty id', () => {
+                                    validateDoesNotExist(fixture, '.memberships .loyaltyId');
+                                });
+
+                                it('displays a membership-display component for each membership', () => {
+                                    const membershipDisplays = fixture.debugElement.queryAll(By.css('app-membership-display'));
+                                    expect(membershipDisplays.length).toBe(component.screenData.memberships.length);
+                                });
                             });
 
-                            it('does not display the loyalty id', () => {
-                                validateDoesNotExist(fixture, '.memberships .loyaltyId');
+                            describe('when there are no memberships', () => {
+                                beforeEach(() => {
+                                    component.screenData.membershipEnabled = true;
+                                    component.screenData.memberships = [];
+                                    component.screenData.noMembershipsFoundLabel = 'no memberships yet';
+                                    fixture.detectChanges();
+                                });
+
+                                it('shows the noMembershipsFound label', () => {
+                                    validateText(fixture, '.memberships', component.screenData.noMembershipsFoundLabel);
+                                });
                             });
 
-                            it('displays a membership-display component for each membership', () => {
-                                const membershipDisplays = fixture.debugElement.queryAll(By.css('app-membership-display'));
-                                expect(membershipDisplays.length).toBe(component.screenData.memberships.length);
-                            });
+
                         });
 
                     });

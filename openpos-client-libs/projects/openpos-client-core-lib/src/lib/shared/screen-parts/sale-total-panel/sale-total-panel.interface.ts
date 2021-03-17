@@ -21,6 +21,7 @@ export interface SaleTotalPanelInterface extends IAbstractScreen {
     prompt: string;
     statusMessage: string;
     loyaltyIDLabel: string;
+    noMembershipsFoundLabel: string;
     membershipEnabled: boolean;
     memberships: Membership[];
 }
