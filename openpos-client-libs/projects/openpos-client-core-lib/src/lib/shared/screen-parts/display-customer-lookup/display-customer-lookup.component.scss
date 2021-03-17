@@ -1,6 +1,6 @@
 .customer-details{
   display: grid;
-  padding: .5em 0em .5em 0em;
+  padding: .5em;
   grid-template-columns: 50% 50%;
   grid-template-areas:
           "customerInfoHeader customerInfoHeader"
@@ -33,7 +33,7 @@
 
 .mobile-customer-details{
   display: grid;
-  padding: .5em 0em .5em 0em;
+  padding: .5em;
   grid-template-columns: 50% 50%;
   grid-template-areas:
           "customerInfoLeft customerInfoRight";
