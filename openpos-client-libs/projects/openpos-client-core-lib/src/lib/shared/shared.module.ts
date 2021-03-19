@@ -161,6 +161,11 @@ import {StayFocusedDirective} from './directives/stay-focused.directive';
 import { AudioLicenseComponent } from './components/audio-license/audio-license.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { WatermarkComponent } from './components/watermark/watermark.component';
+import { MembershipDisplayComponent } from "./screen-parts/membership-display/membership-display.component";
+import {RewardsLineItemComponent} from "./screen-parts/rewards-line-item/rewards-line-item.component";
+import { CustomerInformationComponent } from './screen-parts/customer-information/customer-information.component';
+import {RewardsHistoryLineItemComponent} from "./screen-parts/rewards-history-line-item/rewards-history-line-item.component";
+
 
 const screenParts = [
     TenderPartComponent,
@@ -175,6 +180,10 @@ const screenParts = [
     PromptFormPartComponent,
     DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
+    MembershipDisplayComponent,
+    CustomerInformationComponent,
+    RewardsLineItemComponent,
+    RewardsHistoryLineItemComponent,
     ProgressBarPartComponent,
     WebcamViewerComponent,
     SystemStatusComponent,

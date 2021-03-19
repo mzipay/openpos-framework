@@ -40,12 +40,12 @@
             padding: 10px;
             .grid-container {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-                grid-template-rows: 1fr 1fr;
+                grid-template-columns: 1fr 10fr;
+                grid-template-rows: auto 1fr;
                 gap: 0px 0px;
                 grid-template-areas:
-                    "Name Name Name Name"
-                    "Icon Memberships Memberships Memberships";
+                    "Name Name"
+                    "Icon Memberships";
                 .name {
                     grid-area: Name;
                     .customer-name {
@@ -58,7 +58,6 @@
                 .icon {
                     grid-area: Icon;
                     display: inline-block;
-                    color: lightgray;
                 }
                 .memberships {
                     grid-area: Memberships;
