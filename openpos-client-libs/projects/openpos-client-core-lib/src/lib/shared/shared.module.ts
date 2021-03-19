@@ -167,7 +167,11 @@ import { StatusDetailsItemComponent } from './status/status-details/item/status-
 import { StatusBarComponent } from './status/status-bar/status-bar.component';
 import { LocalizePipe } from './pipes/localize.pipe';
 import { ModalOverlayContainerDirective } from './modal-overlay-container/modal-overlay-container.directive';
+import { MembershipDisplayComponent } from "./screen-parts/membership-display/membership-display.component";
 import { ImageScannerComponent } from '../core/platform-plugins/barcode-scanners/image-scanner.component';
+import {RewardsLineItemComponent} from "./screen-parts/rewards-line-item/rewards-line-item.component";
+import { CustomerInformationComponent } from './screen-parts/customer-information/customer-information.component';
+import {RewardsHistoryLineItemComponent} from "./screen-parts/rewards-history-line-item/rewards-history-line-item.component";
 
 const screenParts = [
     TenderPartComponent,
@@ -182,6 +186,10 @@ const screenParts = [
     PromptFormPartComponent,
     DynamicFormPartComponent,
     AutoCompleteAddressPartComponent,
+    MembershipDisplayComponent,
+    CustomerInformationComponent,
+    RewardsLineItemComponent,
+    RewardsHistoryLineItemComponent,
     ProgressBarPartComponent,
     WebcamViewerComponent,
     SystemStatusComponent,

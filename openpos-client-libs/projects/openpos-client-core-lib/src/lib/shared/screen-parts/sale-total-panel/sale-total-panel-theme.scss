@@ -2,6 +2,13 @@
     $border: map-get($mat-grey, 800);
     $item-count-background: map-get($mat-grey, 200);
     $disabled-border: map-get(map-get($theme, foreground), disabled-text);
+    $foreground: map-get($theme, foreground );
+
+    .linked-customer-summary {
+        .icon {
+            color: map_get($foreground, icon);
+        }
+    }
 
     .item-count {
         background-color: $item-count-background;
