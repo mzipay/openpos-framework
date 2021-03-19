@@ -29,17 +29,13 @@ import org.jumpmind.pos.core.error.IErrorHandler;
 import org.jumpmind.pos.core.flow.config.IFlowConfigProvider;
 import org.jumpmind.pos.core.flow.config.TransitionStepConfig;
 import org.jumpmind.pos.core.service.IScreenService;
-import org.jumpmind.pos.util.AppUtils;
+import org.jumpmind.pos.util.Version;
+import org.jumpmind.pos.util.Versions;
 import org.jumpmind.pos.util.clientcontext.ClientContext;
-import org.jumpmind.pos.util.event.AppEvent;
 import org.jumpmind.pos.util.event.Event;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -67,6 +63,9 @@ public class StateManagerContainer implements IStateManagerContainer, Applicatio
     private Map<String, Map<String, StateManager>> stateManagersByAppIdByNodeId = new HashMap<>();
 
     private ThreadLocal<IStateManager> currentStateManager = new InheritableThreadLocal<>();
+
+    private String openposVersion;
+    private String commerceVersion;
 
     @Override
     public synchronized void removeSessionIdVariables(String sessionId) {
@@ -110,6 +109,7 @@ public class StateManagerContainer implements IStateManagerContainer, Applicatio
             setCurrentStateManager(stateManager);
             clientContext.put("deviceId", deviceId);
             clientContext.put("appId", appId);
+            setClientContextVersions();
             if(personalizationProperties != null){
                 personalizationProperties.entrySet().forEach(entry -> clientContext.put(entry.getKey(), entry.getValue()) );
             }
@@ -194,6 +194,7 @@ public class StateManagerContainer implements IStateManagerContainer, Applicatio
             clientContext.put("deviceId", stateManager.getDeviceId());
             clientContext.put("appId", stateManager.getAppId());
             clientContext.put("deviceMode", stateManager.getDeviceMode());
+            setClientContextVersions();
         } else {
             setupLogging("server");
 
@@ -216,6 +217,36 @@ public class StateManagerContainer implements IStateManagerContainer, Applicatio
                 }
             }
         }
+    }
+
+    private void setClientContextVersions() {
+        clientContext.put("openposVersion", getOpenposVersion());
+        clientContext.put("commerceVersion", getCommerceVersion());
+    }
+
+    private String getOpenposVersion() {
+        if (null == openposVersion) {
+            Version version = Versions.getVersions().stream()
+                    .filter(v -> "openpos-server-core-lib".equalsIgnoreCase(v.getComponentName()))
+                    .findFirst().orElse(null);
+
+            openposVersion = version != null ? version.getVersion() : "?";
+        }
+
+        return openposVersion;
+    }
+
+    private String getCommerceVersion() {
+        if (null == commerceVersion) {
+            // Should never have both commerce and nu-commerce versions, so take whichever one is found
+            Version version = Versions.getVersions().stream()
+                    .filter(v -> "commerce".equalsIgnoreCase(v.getComponentName()) || "nu-commerce".equalsIgnoreCase(v.getComponentName()))
+                    .findFirst().orElse(null);
+
+            commerceVersion = version != null ? version.getVersion() : "?";
+        }
+
+        return commerceVersion;
     }
 
 }
