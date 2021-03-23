@@ -80,7 +80,7 @@ public class ActionHandlerImpl {
             if (currentClass != null && !Modifier.isAbstract(currentClass.getModifiers()) && FlowUtil.isState(currentClass)
                     && !currentClass.isAssignableFrom(state.getClass())) {
                 return false;
-            } else if (currentClass.isAssignableFrom(state.getClass())) {
+            } else if (currentClass != null && currentClass.isAssignableFrom(state.getClass())) {
                 return true;
             }
 
