@@ -164,8 +164,8 @@ import { WatermarkComponent } from './components/watermark/watermark.component';
 import { MembershipDisplayComponent } from "./screen-parts/membership-display/membership-display.component";
 import {RewardsLineItemComponent} from "./screen-parts/rewards-line-item/rewards-line-item.component";
 import { CustomerInformationComponent } from './screen-parts/customer-information/customer-information.component';
-import {RewardsHistoryLineItemComponent} from "./screen-parts/rewards-history-line-item/rewards-history-line-item.component";
-
+import {RewardsHistoryLineItemComponent} from './screen-parts/rewards-history-line-item/rewards-history-line-item.component';
+import { DisplayCustomerLookupComponent } from './screen-parts/display-customer-lookup/display-customer-lookup.component';
 
 const screenParts = [
     TenderPartComponent,
@@ -283,6 +283,7 @@ const components = [
     TransactionSummaryComponent,
     StampComponent,
     ToastComponent,
+    DisplayCustomerLookupComponent,
     WatermarkComponent
 ];
 

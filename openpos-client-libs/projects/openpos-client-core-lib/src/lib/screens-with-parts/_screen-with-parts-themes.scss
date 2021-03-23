@@ -7,6 +7,7 @@
 @import './item-detail/item-detail-theme';
 @import './return/return-theme';
 @import './transaction-search/transaction-search-theme';
+@import './customer-search-result-dialog/customer-search-result-dialog-theme';
 
 @mixin screen-with-parts-themes($theme){
     @include sale-theme($theme);
@@ -17,4 +18,5 @@
     @include return-theme($theme);
     @include transaction-search-theme($theme);
     @include customer-details-dialog-theme($theme);
+    @include customer-search-result-dialog-theme($theme);
 }
