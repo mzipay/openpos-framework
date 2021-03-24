@@ -1,5 +1,6 @@
 package org.jumpmind.pos.print;
 
+import jpos.JposConst;
 import jpos.JposException;
 import jpos.POSPrinterConst;
 import jpos.services.EventCallbacks;
@@ -32,6 +33,8 @@ public class EscpPOSPrinter implements IOpenposPrinter {
     IConnectionFactory connectionFactory;
     boolean deviceEnabled = true;
     private String printerName;
+    private boolean claimed;
+    private int state = JposConst.JPOS_S_CLOSED;
 
     // certain configurations have to be configured for "unsolicited status" to work properly, which means
     // status bytes come back after commands where we are not really interested in them.
@@ -61,6 +64,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public void claim(int timeout) throws JposException {
+    	this.claimed= true;
     }
 
 
@@ -74,6 +78,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
         unsolicitedStatusMode = BoolUtils.toBoolean(settings.get("unsolicitedStatusMode"));
 
         initializePrinter();
+        this.state = JposConst.JPOS_S_IDLE;
     }
 
     protected void initializePrinter() {
@@ -100,11 +105,12 @@ public class EscpPOSPrinter implements IOpenposPrinter {
             this.writer = null;
         }
         this.connectionFactory.close(this.peripheralConnection);
+        this.state = JposConst.JPOS_S_CLOSED;
     }
 
     @Override
     public void release() throws JposException {
-
+    	claimed = false;
     }
 
     @Override
@@ -136,8 +142,16 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public void cutPaper(int percentage) {
+
+        try {
+			this.peripheralConnection.getOut().flush();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
         printNormal(0, printerCommands.get(PrinterCommands.CUT_FEED));  // epson will cut through barcode without some feed
         printNormal(0, printerCommands.get(PrinterCommands.CUT_PAPER));
+        
     }
 
     @Override
@@ -169,7 +183,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
             connection.getOut().flush();
             AppUtils.sleep(500);
 
-            if (unsolicitedStatusMode) {
+             if (unsolicitedStatusMode) {
                 int statusByteThrowaway1 = connection.getIn().read();
                 int statusByteThrowaway2 = connection.getIn().read();
             }
@@ -203,7 +217,8 @@ public class EscpPOSPrinter implements IOpenposPrinter {
         Map<String, String> substitutions = new HashMap<>();
 
         switch (symbology) {
-            case POSPrinterConst.PTR_BCS_Code128:
+            case POSPrinterConst.PTR_BCS_Code128 :
+            case POSPrinterConst.PTR_BCS_Code128_Parsed:
                 substitutions.put("barcodeType", printerCommands.get(PrinterCommands.BARCODE_TYPE_CODE_128));
 
                 if (StringUtils.isNumeric(data)) {
@@ -373,6 +388,32 @@ public class EscpPOSPrinter implements IOpenposPrinter {
             throw new PrintException("readPrinterStatus() failed ", ex);
         }
     }
+    
+    
+    private int readSlipStatus() {
+        try {
+            getPeripheralConnection().getOut().flush();
+            // TODO this needs work on NCR. Calling this more than a few times puts the printer in a bad state.
+            getPeripheralConnection().getOut().write(new byte[]{0x1d, 0x04,5}); // request status.
+
+            getPeripheralConnection().getOut().flush();
+            if (getPeripheralConnection().getIn() != null) {
+                Thread.sleep(500);
+                int statusByte = getPeripheralConnection().getIn().read();
+                if (statusByte == -1) {
+                    throw new PrinterException("Can't read printer status.");
+                }
+                return statusByte;
+            } else {
+                return 0;
+            }
+        } catch (Exception ex) {
+            if (printerStatusReporter != null) {
+                printerStatusReporter.reportStatus(Status.Error, ex.getMessage());
+            }
+            throw new PrintException("readPrinterStatus() failed ", ex);
+        }
+    }
 
     @Override
     public void printSlip(String text, int timeoutInMillis) {
@@ -394,9 +435,16 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
         byte status = -1;
 
-        getPeripheralConnection().resetInput();
 
         try {
+        	while(this.getJrnEmpty()) {
+                log.info("is check empty " + this.getJrnEmpty());
+                Thread.sleep(500);
+        	}
+            log.info("is check empty " + this.getJrnEmpty());
+
+            getPeripheralConnection().resetInput();
+
             getPeripheralConnection().getOut().write(new byte[]{0x1B, 0x77, 0x01});
             getPeripheralConnection().getOut().flush();
             long micrWaitTime = Long.valueOf(settings.getOrDefault("micrWaitTime", "2000").toString());
@@ -481,7 +529,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public boolean getJrnEmpty() throws JposException {
-        int printerStatus = readPrinterStatus();
+        int printerStatus = readSlipStatus();
         return (printerStatus & SLIP_LEADING_EDGE_SENSOR_COVERED) == 0;
     }
 
@@ -778,7 +826,6 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public void deleteInstance() throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
     }
 
     @Override
@@ -1048,12 +1095,11 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public boolean getAsyncMode() throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
+    	return false;
     }
 
     @Override
     public void setAsyncMode(boolean asyncMode) throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
     }
 
     @Override
@@ -1329,17 +1375,33 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public void beginInsertion(int timeout) throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
+        try {
+            getPeripheralConnection().getOut().write(new byte[]{0x1B, 0x63, 0x30, 4}); // select slip
+            getPeripheralConnection().getOut().write(new byte[] {0x1B, 0x66, 1, 2}); // wait for one minute for a slip, and start printing .2 seconds after slip detected.
+            getPeripheralConnection().getOut().flush();
+            
+            long startTime = System.currentTimeMillis();
+            long timeElapsed = 0 ;
+        	while(this.getJrnEmpty() || timeElapsed < timeout) {
+                log.info("is check empty " + this.getJrnEmpty());
+                Thread.sleep(500);
+                timeElapsed = timeElapsed + 500;
+        	}
+            log.info("is check empty " + this.getJrnEmpty());
+
+        } catch (Exception ex) {
+            printerStatusReporter.reportStatus(Status.Error, ex.getMessage());
+            throw new PrintException("Failed to beginSlipMode", ex);
+        }
     }
 
     @Override
     public void clearOutput() throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
+
     }
 
     @Override
     public void endInsertion() throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
     }
 
     @Override
@@ -1385,7 +1447,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public boolean getClaimed() throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
+        return claimed;
     }
 
     @Override
@@ -1431,7 +1493,7 @@ public class EscpPOSPrinter implements IOpenposPrinter {
 
     @Override
     public int getState() throws JposException {
-        throw new PrintNotSupportedException("Method not supported on this driver.");
+    	return this.state;
     }
 
     @Override

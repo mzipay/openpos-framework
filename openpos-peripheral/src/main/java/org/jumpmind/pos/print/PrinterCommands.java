@@ -14,6 +14,7 @@ public class PrinterCommands {
     public static final String FORMAT_BOLD = "FORMAT_BOLD";
     public static final String FONT_SIZE_MEDIUM = "FONT_SIZE_MEDIUM";
     public static final String FONT_SIZE_LARGE = "FONT_SIZE_LARGE";
+    public static final String FORMAT_BEGIN_DOUBLE_FONT ="FORMAT_BEGIN_DOUBLE_FONT";
     public static final String LINE_SPACING_TIGHT = "LINE_SPACING_TIGHT";
     public static final String LINE_SPACING_SINGLE = "LINE_SPACING_SINGLE";
     public static final String LINE_SPACING_1_AND_HALF = "LINE_SPACING_1_AND_HALF";

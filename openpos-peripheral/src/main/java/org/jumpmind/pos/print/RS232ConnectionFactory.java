@@ -20,6 +20,8 @@ public class RS232ConnectionFactory implements IConnectionFactory {
     public final static String CONNECT_TIMEOUT = "connectTimeout";
 
     public final static String DLL_NAME = "rxtxSerial.dll";
+    
+   
 
     @Override
     public PeripheralConnection open(Map<String, Object> settings) {

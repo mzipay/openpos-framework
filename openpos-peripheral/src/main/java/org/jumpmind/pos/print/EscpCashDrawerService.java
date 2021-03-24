@@ -80,13 +80,9 @@ public class EscpCashDrawerService implements CashDrawerService19 {
     public boolean getDrawerOpened() throws JposException {
         boolean drawerOpened = false;
         if (printer != null) {
-            try {
-                openPrinter();
-                drawerOpened = printer.isDrawerOpen("");
-                closePrinter();
-            } catch (JposException e) {
-                logger.error("Could not check drawer", e);
-            }
+            //openPrinter();
+			drawerOpened = printer.isDrawerOpen("");
+			//closePrinter();
         } else {
             logger.error("Could not check drawer. Printer not found");
         }
@@ -106,13 +102,9 @@ public class EscpCashDrawerService implements CashDrawerService19 {
     public void openDrawer() throws JposException {
         init();
         if (printer != null) {
-            try {
-                openPrinter();
-                printer.openCashDrawer("");
-                closePrinter();
-            } catch (JposException e) {
-                logger.error("Could not open drawer", e);
-            }
+            // openPrinter();
+			printer.openCashDrawer("");
+            // closePrinter();
         } else {
             logger.error("Could not open drawer. Printer not found");
         }

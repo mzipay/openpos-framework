@@ -22,6 +22,7 @@ public class EscpServiceInstanceFactory implements JposServiceInstanceFactory {
 
     private final static String PRINTER_COMMAND_LOCATIONS = "PrinterCommandLocations";
 
+    private static Map<String, JposServiceInstance> jposServiceMap = new HashMap();;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public JposServiceInstance createInstance(String s, JposEntry jposentry) throws JposException {
@@ -48,7 +49,12 @@ public class EscpServiceInstanceFactory implements JposServiceInstanceFactory {
                             value = new Integer(prop.getValueAsString());
                         }
                         field.setAccessible(true);
-                        field.set(instance, value);
+                        if("printer".equalsIgnoreCase(prop.getName())) {
+                        	field.set(instance,jposServiceMap.get(prop.getValue()));
+                        }
+                        else {
+                        	field.set(instance, value);
+                        }
                     } catch (NoSuchFieldException e) {
                         logger.warn("No such property: " + prop.getName() + " exists on " + class1.getSimpleName());
                     } catch (Exception e) {
@@ -59,6 +65,7 @@ public class EscpServiceInstanceFactory implements JposServiceInstanceFactory {
 
             if (instance instanceof IOpenposPrinter) {
                 configureOpenposPrinter((IOpenposPrinter)instance, jposentry);
+                jposServiceMap.put(s, instance);
             }
 
             return instance;
@@ -75,7 +82,9 @@ public class EscpServiceInstanceFactory implements JposServiceInstanceFactory {
         settings.put("port", port);
         settings.put("printerCommandLocations", getJposProperty(jposentry, PRINTER_COMMAND_LOCATIONS, "esc_p.properties"));
         settings.put("printWidth", getJposProperty(jposentry, "printWidth", "48"));
-        settings.put("connectionClass", SocketConnectionFactory.class.getName());
+        settings.put("portName", getJposProperty(jposentry, "portName", ""));
+
+        settings.put("connectionClass", getJposProperty(jposentry, "connectionClass", SocketConnectionFactory.class.getName()));
         printer.init(settings, null);
     }
 
