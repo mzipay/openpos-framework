@@ -34,7 +34,6 @@
                             <span *ngIf="keybindsEnabled(screenData.linkedCustomerButton)"
                                   class="muted-color loyalty-keybind">{{screenData.linkedCustomerButton.keybindDisplayName}}</span></div>
                         </div>
-                    </div>
                     <div class="icon"><app-icon [iconName]="screenData.profileIcon" [iconClass]="(isMobile | async) ? null: 'material-icons mat-36'"></app-icon></div>
                     <div class="memberships">
                         <span *ngIf="!screenData.membershipEnabled" class="loyaltyId">
