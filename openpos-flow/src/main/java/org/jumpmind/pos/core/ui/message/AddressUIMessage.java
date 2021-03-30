@@ -29,42 +29,60 @@ public class AddressUIMessage extends DynamicFormUIMessage {
     }
 
     public void addDefaultAddressFields() {
-        this.getForm().addTextField("streetAddress", "Street Address", "", true);
-        this.getForm().addTextField("addressLine2", "Address Line 2", "", false);
-        this.getForm().addTextField("locality", "City", "", true);
-        this.getForm().addTextField("state", "State", "", true);
-        this.getForm().addTextField("postalCode", "Postal Code", "", true);
-        this.getForm().addTextField("country", "Country", "", true);
+        this.getForm().addTextField("streetAddress", "key:customerdisplay:customer.form.field.addressLine1", "", true);
+        this.getForm().addTextField("addressLine2", "key:customerdisplay:customer.form.field.addressLine2", "", false);
+        this.getForm().addTextField("locality", "key:customerdisplay:customer.form.field.city", "", true);
+        this.getForm().addTextField("state", "key:customerdisplay:customer.form.field.state", "", true);
+        this.getForm().addPostalCodeField("postalCode", "key:customerdisplay:customer.form.field.postalCode", "", true);
+        this.getForm().addTextField("country", "key:customerdisplay:customer.form.field.country", "", true);
     }
 
     public void addDefaultAddressFields(String streetAddress, String addressLine2, String locality, String state, String postalCode, String country) {
-        this.getForm().addTextField("streetAddress", "Street Address", streetAddress, true);
-        this.getForm().addTextField("addressLine2", "Address Line 2", addressLine2, false);
-        this.getForm().addTextField("locality", "City", locality, true);
-        this.getForm().addTextField("state", "State", state, true);
-        this.getForm().addTextField("postalCode", "Postal Code", postalCode, true);
-        this.getForm().addTextField("country", "Country", country, true);
+        this.getForm().addTextField("streetAddress", "key:customerdisplay:customer.form.field.addressLine1", streetAddress, true);
+        this.getForm().addTextField("addressLine2", "key:customerdisplay:customer.form.field.addressLine2", addressLine2, false);
+        this.getForm().addTextField("locality", "key:customerdisplay:customer.form.field.city", locality, true);
+        this.getForm().addTextField("state", "key:customerdisplay:customer.form.field.state", state, true);
+        this.getForm().addPostalCodeField("postalCode", "key:customerdisplay:customer.form.field.postalCode", postalCode, true);
+        this.getForm().addTextField("country", "key:customerdisplay:customer.form.field.country", country, true);
     }
 
 
     public void addAddressFieldsWithComboState(List<String> states) {
-        this.getForm().addTextField("streetAddress", "Street Address", "", true);
-        this.getForm().addTextField("addressLine2", "Address Line 2", "", false);
-        this.getForm().addTextField("locality", "City", "", true);
-        this.getForm().addComboBox("state", "State", states, true);
-        this.getForm().addTextField("postalCode", "Postal Code", "", true);
-        this.getForm().addTextField("country", "Country", "", true);
+        this.getForm().addTextField("streetAddress", "key:customerdisplay:customer.form.field.addressLine1", "", true);
+        this.getForm().addTextField("addressLine2", "key:customerdisplay:customer.form.field.addressLine2", "", false);
+        this.getForm().addTextField("locality", "key:customerdisplay:customer.form.field.city", "", true);
+        this.getForm().addComboBox("state", "key:customerdisplay:customer.form.field.state", states, true);
+        this.getForm().addPostalCodeField("postalCode", "key:customerdisplay:customer.form.field.postalCode", "", true);
+        this.getForm().addTextField("country", "key:customerdisplay:customer.form.field.country", "", true);
     }
 
     public void addAddressFieldsWithComboState(List<String> states, String streetAddress, String addressLine2, String locality, String state, String postalCode, String country) {
-        this.getForm().addTextField("streetAddress", "Street Address", streetAddress, true);
-        this.getForm().addTextField("addressLine2", "Address Line 2", addressLine2, false);
-        this.getForm().addTextField("locality", "City", locality, true);
-        this.getForm().addComboBox("state", "State", state, states, true);
-        this.getForm().addTextField("postalCode", "Postal Code", postalCode, true);
-        this.getForm().addTextField("country", "Country", country, true);
+        this.getForm().addTextField("streetAddress", "key:customerdisplay:customer.form.field.addressLine1", streetAddress, true);
+        this.getForm().addTextField("addressLine2", "key:customerdisplay:customer.form.field.addressLine2", addressLine2, false);
+        this.getForm().addTextField("locality", "key:customerdisplay:customer.form.field.city", locality, true);
+        this.getForm().addComboBox("state", "key:customerdisplay:customer.form.field.state", state, states, true);
+        this.getForm().addPostalCodeField("postalCode", "key:customerdisplay:customer.form.field.postalCode", postalCode, true);
+        this.getForm().addTextField("country", "key:customerdisplay:customer.form.field.country", country, true);
     }
 
+
+    public void addAddressFieldsWithComboState(List<String> states, int streetAddressCharacterLimit, int addressLine2CharacterLimit, int cityCharacterLimit) {
+        this.getForm().addTextField("streetAddress", "key:customerdisplay:customer.form.field.addressLine1", "", true).setMaxLength(streetAddressCharacterLimit);
+        this.getForm().addTextField("addressLine2", "key:customerdisplay:customer.form.field.addressLine2", "", false).setMaxLength(addressLine2CharacterLimit);
+        this.getForm().addTextField("locality", "key:customerdisplay:customer.form.field.city", "", true).setMaxLength(cityCharacterLimit);
+        this.getForm().addComboBox("state", "key:customerdisplay:customer.form.field.state", states, true);
+        this.getForm().addPostalCodeField("postalCode", "key:customerdisplay:customer.form.field.postalCode", "", true);
+        this.getForm().addTextField("country", "key:customerdisplay:customer.form.field.country", "", true);
+    }
+
+    public void addAddressFieldsWithComboState(List<String> states, String streetAddress, String addressLine2, String locality, String state, String postalCode, String country, int streetAddressCharacterLimit, int addressLine2CharacterLimit, int cityCharacterLimit) {
+        this.getForm().addTextField("streetAddress", "key:customerdisplay:customer.form.field.addressLine1", streetAddress, true).setMaxLength(streetAddressCharacterLimit);
+        this.getForm().addTextField("addressLine2", "key:customerdisplay:customer.form.field.addressLine2", addressLine2, false).setMaxLength(addressLine2CharacterLimit);
+        this.getForm().addTextField("locality", "key:customerdisplay:customer.form.field.city", locality, true).setMaxLength(cityCharacterLimit);
+        this.getForm().addComboBox("state", "key:customerdisplay:customer.form.field.state", state, states, true);
+        this.getForm().addPostalCodeField("postalCode", "key:customerdisplay:customer.form.field.postalCode", postalCode, true);
+        this.getForm().addTextField("country", "key:customerdisplay:customer.form.field.country", country, true);
+    }
     public BaconStripPart getBaconStrip() {
         return baconStrip;
     }
