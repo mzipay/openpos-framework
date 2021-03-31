@@ -86,7 +86,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
     @Value("${openpos.general.datasourceBeanName:#{null}}")
     protected String dataSourceBeanName;
 
-    @Value("${openpos.general.sqlScriptProfile:test}")
+    @Value("${openpos.general.sqlScriptProfile:setme}")
     protected String sqlScriptProfile;
 
     @Value("${openpos.general.dataModelExtensionPackages:#{null}}")
