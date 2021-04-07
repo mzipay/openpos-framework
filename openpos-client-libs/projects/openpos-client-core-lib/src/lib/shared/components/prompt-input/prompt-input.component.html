@@ -2,6 +2,7 @@
     <ng-container *ngIf="!isDateField(); else dateField" [ngSwitch]="true">
         <div *ngSwitchDefault class="input-barcode-container">
             <div class="input-container">
+                <span class="detail-value">{{infoText}}</span>
                 <mat-form-field class="prompt-text grow" responsive-class>
                     <!-- Was using this:
                         <mat-icon matPrefix class="material-icons" color="primary">{{promptIcon}}</mat-icon>

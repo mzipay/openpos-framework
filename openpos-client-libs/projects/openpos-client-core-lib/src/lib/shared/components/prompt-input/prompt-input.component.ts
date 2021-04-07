@@ -19,6 +19,7 @@ export class PromptInputComponent implements OnInit, OnDestroy {
     @Input() responseText: string;
     @Input() promptIcon: string;
     @Input() hintText: string;
+    @Input() infoText: string;
     @Input() minLength: number;
     @Input() maxLength: number;
     @Input() promptFormGroup: FormGroup;

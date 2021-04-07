@@ -29,6 +29,7 @@ public class PromptUIMessage extends UIMessage {
     private String hintText;
     private String instructions;
     private String responseText;
+    private String infoText;
     private boolean editable = true;
     private FieldInputType responseType;
     private ActionItem actionButton = null;
@@ -241,5 +242,13 @@ public class PromptUIMessage extends UIMessage {
             setValidationMessages(new HashMap<String, String>());
         }
         getValidationMessages().put(validatorName, message);
+    }
+
+    public String getInfoText() {
+        return infoText;
+    }
+
+    public void setInfoText(String infoText) {
+        this.infoText = infoText;
     }
 }
