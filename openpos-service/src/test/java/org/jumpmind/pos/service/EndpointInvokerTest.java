@@ -5,12 +5,15 @@ import org.jumpmind.pos.service.instrumentation.Sample;
 import org.jumpmind.pos.service.instrumentation.ServiceSampleModel;
 import org.jumpmind.pos.service.strategy.IInvocationStrategy;
 import org.jumpmind.pos.service.strategy.LocalOnlyStrategy;
+import org.jumpmind.pos.util.SuppressMethodLogging;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,13 +21,55 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EndpointInvokerTest {
-
+    @SuppressMethodLogging
     public void TestMethodNotAnnotated() {}
 
     @Sample
     public void TestMethodAnnotated() {}
 
     String installationId = "TestInstallationId";
+
+    @Test
+    public void invokeStrategySamplesAndCallsInvokeTest() throws Throwable {
+        IInvocationStrategy invocationStrategy = mock(LocalOnlyStrategy.class);
+        List<String> profileIds = new ArrayList<>();
+        Method method = EndpointInvokerTest.class.getMethod("TestMethodNotAnnotated");
+
+        doReturn(new Object()).when(invocationStrategy).invoke(eq(profileIds), eq(null), eq(method), anyObject(), eq(null));
+
+        EndpointInvoker endpointInvoker = spy(new EndpointInvoker());
+
+        Object result = endpointInvoker.invokeStrategy(invocationStrategy, profileIds, null, null, method, null, null);
+
+        verify(endpointInvoker, atLeastOnce()).startSample(invocationStrategy, null, null, method, null);
+        verify(invocationStrategy, atLeastOnce()).invoke(eq(profileIds), eq(null), eq(method), anyObject(), eq(null));
+        verify(endpointInvoker, atLeastOnce()).endSampleSuccess(anyObject(), eq(null), eq(null), eq(method), eq(null), anyObject());
+        assertNotNull(result, "invokeStrategy should not return null in this case.");
+    }
+
+    @Test
+    public void invokeStrategyEndsSampleAndThrowsTest() throws Throwable {
+        IInvocationStrategy invocationStrategy = mock(LocalOnlyStrategy.class);
+        List<String> profileIds = new ArrayList<>();
+        Method method = EndpointInvokerTest.class.getMethod("TestMethodNotAnnotated");
+
+        Exception exception = new Exception();
+        doThrow(exception).when(invocationStrategy).invoke(eq(profileIds), eq(null), eq(method), anyObject(), eq(null));
+
+        EndpointInvoker endpointInvoker = spy(new EndpointInvoker());
+
+        try{
+            Object result = endpointInvoker.invokeStrategy(invocationStrategy, profileIds, null, null, method, null, null);
+        } catch (Throwable ex) {
+            verify(endpointInvoker, atLeastOnce()).startSample(invocationStrategy, null, null, method, null);
+            verify(invocationStrategy, atLeastOnce()).invoke(eq(profileIds), eq(null), eq(method), anyObject(), eq(null));
+            verify(endpointInvoker, never()).endSampleSuccess(anyObject(), eq(null), eq(null), eq(method), eq(null), anyObject());
+            verify(endpointInvoker, atLeastOnce()).endSampleError(anyObject(), eq(null), eq(null), eq(method), eq(null), anyObject(), anyObject());
+            if (!ex.equals(exception)) {
+                throw ex;
+            }
+        }
+    }
 
     private ServiceSampleModel getServiceSampleModel() {
         ServiceSampleModel sampleModel = mock(ServiceSampleModel.class, RETURNS_DEEP_STUBS);
