@@ -1,9 +1,11 @@
 package org.jumpmind.pos.print;
 
+import com.google.common.collect.Lists;
 import jpos.JposException;
 import jpos.POSPrinterConst;
 import jpos.services.EventCallbacks;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.jumpmind.pos.util.AppUtils;
@@ -14,10 +16,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static jpos.POSPrinterConst.PTR_BCS_UPCA;
 
 @Slf4j
 public class EscpPOSPrinter implements IOpenposPrinter {
@@ -221,6 +222,14 @@ public class EscpPOSPrinter implements IOpenposPrinter {
                 substitutions.put("barcodeData", barcodeData);
 
                 break;
+            case PTR_BCS_UPCA:
+                substitutions.put("barcodeType", printerCommands.get(PrinterCommands.BARCODE_TYPE_CODE_UPCA));
+                List<Byte> barcodeCommand = Lists.newArrayList(ArrayUtils.toObject(data.getBytes()));
+                barcodeData = new String(toBytes(barcodeCommand));
+                substitutions.put("barcodeLength", new String(new byte[] {(byte)barcodeData.length()}));
+                substitutions.put("barcodeData", barcodeData);
+                break;
+
             default:
                 throw new PrintException("Unsupported barcode symbology: " + symbology);
         }

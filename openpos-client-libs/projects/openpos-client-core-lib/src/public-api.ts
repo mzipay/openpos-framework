@@ -338,4 +338,4 @@ export * from './lib/utilites/time-utils';
 
 export * from './lib/styles/theme-test.module';
 
-export * from './lib/shared/status/status.service';
+export * from './lib/core/status/status.service';

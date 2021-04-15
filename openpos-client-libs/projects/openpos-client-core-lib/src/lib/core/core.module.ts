@@ -73,6 +73,7 @@ import { AudioInteractionService } from './audio/audio-interaction.service';
 import { AudioConsolePlugin } from './audio/audio-console.plugin';
 import {ClientExecutableService} from "./services/client-executable.service";
 import {InfineaScannerCapacitorPlugin} from "./platform-plugins/scanners/infinea-scanner/infinea-scanner-capacitor/infinea-scanner-capacitor.plugin";
+import {Dpp255CapacitorPlugin} from "./platform-plugins/printers/dpp-255-capacitor.plugin";
 
 registerLocaleData(locale_enCA, 'en-CA');
 registerLocaleData(locale_frCA, 'fr-CA');
@@ -142,10 +143,13 @@ registerLocaleData(locale_frCA, 'fr-CA');
         { provide: PLUGINS, useExisting: AndroidContentProviderPlugin, multi: true },
         { provide: PLUGINS, useExisting: ScanditScannerCordovaPlugin, multi: true},
         { provide: PLUGINS, useExisting: InfineaScannerCapacitorPlugin, multi: true },
+        { provide: PLUGINS, useExisting: Dpp255CapacitorPlugin, multi: true },
         { provide: SCANNERS, useExisting: ServerScannerPlugin, multi: true, deps: [SessionService]},
         { provide: PLATFORMS, useExisting: CordovaPlatform, multi: true},
         BrowserPrinterPlugin,
         { provide: PRINTERS, useExisting: BrowserPrinterPlugin, multi: true},
+        { provide: PRINTERS, useExisting: Dpp255CapacitorPlugin, multi: true},
+
         LocationService,
         { provide: PROVIDERS, useExisting: LocationProviderDefault, multi: true},
         TrainingOverlayService,

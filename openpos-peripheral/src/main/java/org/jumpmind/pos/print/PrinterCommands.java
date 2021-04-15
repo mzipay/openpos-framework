@@ -24,6 +24,7 @@ public class PrinterCommands {
     public static final String ESC_P_MODE = "ESC_P_MODE";
     public static final String PRINT_BARCODE = "PRINT_BARCODE";
     public static final String BARCODE_TYPE_CODE_128 = "BARCODE_TYPE_CODE_128";
+    public static final String BARCODE_TYPE_CODE_UPCA= "BARCODE_TYPE_CODE_UPCA";
     public static final String IMAGE_START_BYTE = "IMAGE_START_BYTE";
     public static final String BARCODE_TYPE_CODE_39 = "BARCODE_TYPE_CODE_39";
     public static final String CUT_FEED = "CUT_FEED";

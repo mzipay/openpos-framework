@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {IPlatformPlugin} from '../../../platform-plugin.interface';
+import {InfineaPlugin, IPlatformPlugin} from '../../../platform-plugin.interface';
 import {IScanner} from '../../scanner.interface';
 import {Observable, of, Subject, throwError} from 'rxjs';
 import {IScanData} from '../../scan.interface';
@@ -13,10 +13,6 @@ declare module '@capacitor/core' {
     interface PluginRegistry {
         InfineaScannerCapacitor: InfineaPlugin;
     }
-}
-
-export interface InfineaPlugin {
-    addListener(event: 'scan', callback: (e) => void): PluginListenerHandle;
 }
 
 @Injectable({
@@ -38,25 +34,26 @@ export class InfineaScannerCapacitorPlugin implements IPlatformPlugin, IScanner 
 
     initialize(): Observable<string> {
 
-        // return of(CapacitorPlugins.InfineaScannerCapacitor.initialize({
-        //     apiKey: 'UtJtVhO9yImiQhADyh+0PqEQG0eotVpTsBN9IALb0maa2pUMXH1GvIlhzNLEsIrmFoGs4rumE1Ex4nFR9sHWy1Liox7o/7nvGYfz/kOrisY='
-        // })).pipe(
-        //     map(() => "initialized Infinea Scanner for Capacitor")
-        // );
-        return this._config.getConfiguration('InfineaScannerCapacitor').pipe(
-            take(1),
-            timeout(10000),
-            switchMap((config: ConfigChangedMessage & any) => {
-                if (config.licenseKey) {
-                    return of(CapacitorPlugins.InfineaCapacitor.initialize({
-                        apiKey: config.licenseKey
-                    }));
-                }
-
-                return throwError('could not find Infinea license key');
-            }),
+        return of(CapacitorPlugins.InfineaScannerCapacitor.initialize({
+            apiKey: 'UtJtVhO9yImiQhADyh+0PqEQG0eotVpTsBN9IALb0maa2pUMXH1GvIlhzNLEsIrmFoGs4rumE1Ex4nFR9sHWy1Liox7o/7nvGYfz/kOrisY='
+        })).pipe(
             map(() => "initialized Infinea Scanner for Capacitor")
         );
+        // return this._config.getConfiguration('InfineaScannerCapacitor').pipe(
+        //     take(1),
+        //     timeout(10000),
+        //     switchMap((config: ConfigChangedMessage & any) => {
+        //         console.info("Message: " + JSON.stringify(config));
+        //         if (config.licenseKey) {
+        //             return of(CapacitorPlugins.InfineaCapacitor.initialize({
+        //                 apiKey: config.licenseKey
+        //             }));
+        //         }
+        //
+        //         return throwError('could not find Infinea license key');
+        //     }),
+        //     map(() => "initialized Infinea Scanner for Capacitor")
+        // );
     }
 
     startScanning(): Observable<IScanData> {
@@ -70,7 +67,6 @@ export class InfineaScannerCapacitorPlugin implements IPlatformPlugin, IScanner 
 
             return () => {
                 handle.remove();
-                CapacitorPlugins.InfineaScannerCapacitor.stopScan();
             };
         });
     }
