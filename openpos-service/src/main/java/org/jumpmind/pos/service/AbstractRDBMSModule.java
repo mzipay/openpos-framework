@@ -79,7 +79,7 @@ abstract public class AbstractRDBMSModule extends AbstractServiceFactory impleme
     @Value("${openpos.general.rebuildDatabase.enabled:true}")
     protected boolean rebuildDatabaseEnabled;
 
-    @Value(("${server.datasource.initialize:false}"))
+    @Value(("${spring.datasource.initialize:false}"))
     protected boolean useInjectedDatasource;
 
     @Autowired
