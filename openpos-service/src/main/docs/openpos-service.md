@@ -84,12 +84,10 @@ The module declaration provides at least the following information about the mod
 @RequestMapping("/customer")
 public interface ICustomerService {
 
-    @Sample
     @RequestMapping(path="/search", method=RequestMethod.POST)
     @ResponseBody
     public SearchCustomerResult searchCustomer(@RequestBody SearchCustomerRequest request);
     
-    @Sample
     @RequestMapping(value="/device/{deviceId}/save", method=RequestMethod.POST)
     public CustomerModel saveCustomer(@PathVariable("deviceId") String deviceId, @RequestBody CustomerModel customer);
 }
@@ -99,7 +97,6 @@ Description of the annotations:
 * @Api (Swagger) is used by swagger to generate documentation and a Rest service test page.
 * @RestController (Spring) makes this a Spring bean.
 * @RequestMapping (Spring) maps all method in this Service Interface under the URL path of "/customer"
-* @Sample (openpos_ means that you want this web method to be sampled and for the framework to collect statistics about how it is invokved.
 * @RequestMapping (Spring) is the standard Spring annotation to map a method to a more specific part of the REST URL and to an HTTP method.
 * @ResponseBody (Spring) indicates that the method return value should be mapped to the web response body (in this case, as JSON)
 
