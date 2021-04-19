@@ -300,10 +300,10 @@ public class EndpointInvoker implements InvocationHandler {
         if (profileIds.size() == 0) {
             profileIds.add("local");
         }
-        return invokeStrategy(path, strategy, profileIds, config, proxy, method, args, endpointImplementation);
+        return invokeStrategy(path, strategy, profileIds, config, proxy, method, args, endpointImplementation, endpointsByPathMap);
     }
 
-    protected Object invokeStrategy(String path, IInvocationStrategy strategy, List<String> profileIds, ServiceSpecificConfig config, Object proxy, Method method, Object[] args, String endpointImplementation) throws Throwable {
+    protected Object invokeStrategy(String path, IInvocationStrategy strategy, List<String> profileIds, ServiceSpecificConfig config, Object proxy, Method method, Object[] args, String endpointImplementation, Map<String, Object> endpointsByPathMap) throws Throwable {
         ServiceSampleModel sample = startSample(path, strategy, config, proxy, method, args);
         Object result = null;
         try {

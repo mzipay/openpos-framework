@@ -64,7 +64,7 @@ public class EndpointInvokerTest {
         EndpointInvoker endpointInvoker = spy(new EndpointInvoker());
         endpointInvoker.dbSession = session;
 
-        Object result = endpointInvoker.invokeStrategy(path, invocationStrategy, profileIds, config, null, method, null, null);
+        Object result = endpointInvoker.invokeStrategy(path, invocationStrategy, profileIds, config, null, method, null, null, null);
 
         verify(endpointInvoker, atLeastOnce()).startSample(path, invocationStrategy, config, null, method, null);
         verify(invocationStrategy, atLeastOnce()).invoke(eq(profileIds), eq(null), eq(method), anyObject(), eq(null));
@@ -91,7 +91,7 @@ public class EndpointInvokerTest {
         endpointInvoker.dbSession = session;
 
         try{
-            Object result = endpointInvoker.invokeStrategy(path, invocationStrategy, profileIds, config, null, method, null, null);
+            Object result = endpointInvoker.invokeStrategy(path, invocationStrategy, profileIds, config, null, method, null, null, null);
         } catch (Throwable ex) {
             verify(endpointInvoker, atLeastOnce()).startSample(path, invocationStrategy, config, null, method, null);
             verify(invocationStrategy, atLeastOnce()).invoke(eq(profileIds), eq(null), eq(method), anyObject(), eq(null));
