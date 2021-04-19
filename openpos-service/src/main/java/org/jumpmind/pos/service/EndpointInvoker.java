@@ -368,7 +368,8 @@ public class EndpointInvoker implements InvocationHandler {
             Method method,
             Object[] args) {
         Optional<ServiceSampleModel> serviceSampleModel = Optional.empty();
-        if (config != null && config.getSamplingConfig() != null && config.getSamplingConfig().isEnabled()) {
+        if (config != null && config.getSamplingConfig() != null && config.getSamplingConfig().isEnabled()
+            && config.getEndpoints() != null) {
             serviceSampleModel = config.getEndpoints()
                     .stream()
                     .filter(endpoint -> endpoint.getSamplingConfig().isEnabled() && path.equals(endpoint.getPath()))
