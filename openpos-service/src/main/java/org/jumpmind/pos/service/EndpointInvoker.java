@@ -367,9 +367,6 @@ public class EndpointInvoker implements InvocationHandler {
             Object proxy,
             Method method,
             Object[] args) {
-        if (path.equals("/customer/search")){
-            path.trim();
-        }
         Optional<ServiceSampleModel> serviceSampleModel = Optional.empty();
         if (config != null && config.getSamplingConfig() != null && config.getSamplingConfig().isEnabled()) {
             serviceSampleModel = config.getEndpoints()

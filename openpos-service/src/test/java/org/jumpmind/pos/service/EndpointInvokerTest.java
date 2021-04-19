@@ -39,7 +39,7 @@ public class EndpointInvokerTest {
         config.setSamplingConfig(sampleConfig);
 
         EndpointSpecificConfig endpointSpecificConfig = new EndpointSpecificConfig();
-        endpointSpecificConfig.setPath("/one");
+        endpointSpecificConfig.setPath("/test/one");
         endpointSpecificConfig.setSamplingConfig(sampleConfig);
 
         List<EndpointSpecificConfig> endpoints = new ArrayList<>();
