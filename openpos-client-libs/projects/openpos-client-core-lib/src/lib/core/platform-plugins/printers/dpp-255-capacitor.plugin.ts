@@ -35,7 +35,7 @@ export class Dpp255CapacitorPlugin implements IPrinter, IPlatformPlugin {
     }
 
     initialize(): Observable<string> {
-        return of()
+        return of("DPP-255 for Capacitor initialized")
     }
 
     name(): string {

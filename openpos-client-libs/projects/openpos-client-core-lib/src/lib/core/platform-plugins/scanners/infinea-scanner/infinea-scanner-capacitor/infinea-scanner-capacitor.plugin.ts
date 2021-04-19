@@ -39,7 +39,7 @@ export class InfineaScannerCapacitorPlugin implements IPlatformPlugin, IScanner 
     }
 
     initialize(): Observable<string> {
-        return of()
+        return of("Infinea Scanner for Capacitor initialized")
     }
 
     startScanning(): Observable<IScanData> {
