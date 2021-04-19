@@ -55,6 +55,7 @@ public class ServiceConfig {
         }
         if (additionalConfigSource != null) {
             additionalConfigSource.applyAdditionalConfiguration(String.format("openpos.services.specificConfig.%s", serviceId), config);
+            config.findAdditionalConfigs(serviceId);
         }
         return config;
     }

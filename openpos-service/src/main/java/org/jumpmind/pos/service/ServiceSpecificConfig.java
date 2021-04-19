@@ -1,15 +1,26 @@
 package org.jumpmind.pos.service;
 
 import org.jumpmind.pos.service.strategy.InvocationStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ServiceSpecificConfig implements Cloneable {
+
+    @Autowired(required = false)
+    IConfigApplicator additionalConfigSource;
 
     protected List<String> profileIds = null;
     protected InvocationStrategy strategy = InvocationStrategy.LOCAL_ONLY;
     protected List<EndpointSpecificConfig> endpoints = new ArrayList<>();
+    protected SamplingConfig samplingConfig = null;
+
+    public SamplingConfig getSamplingConfig() { return samplingConfig; }
+
+    public void setSamplingConfig(SamplingConfig samplingConfig) {this.samplingConfig = samplingConfig;}
 
     public List<String> getProfileIds() {
         return profileIds;
@@ -41,4 +52,19 @@ public class ServiceSpecificConfig implements Cloneable {
         }
     }
 
+    public void findAdditionalConfigs(String serviceId) {
+        if (samplingConfig == null) {
+            samplingConfig = new SamplingConfig();
+        }
+        if(additionalConfigSource != null) {
+            String startsWith = String.format("openpos.services.specificConfig.%s.samplingConfig", serviceId);
+            additionalConfigSource.applyAdditionalConfiguration(startsWith, samplingConfig);
+
+            for (int index = 0; index < endpoints.size(); index++) {
+                endpoints.get(index).findAdditionalConfigs(serviceId, index);
+                startsWith = String.format("openpos.services.specificConfig.%s.endpoints[%d]", serviceId, index);
+                additionalConfigSource.applyAdditionalConfiguration(startsWith, endpoints.get(index));
+            }
+        }
+    }
 }
