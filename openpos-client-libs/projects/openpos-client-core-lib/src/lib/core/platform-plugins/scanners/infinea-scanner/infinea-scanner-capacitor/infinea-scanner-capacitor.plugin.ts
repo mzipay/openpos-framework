@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {InfineaPlugin, IPlatformPlugin} from '../../../platform-plugin.interface';
 import {IScanner} from '../../scanner.interface';
-import {Observable, of, Subject, throwError} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {IScanData} from '../../scan.interface';
-import {Capacitor, PluginListenerHandle, Plugins as CapacitorPlugins} from "@capacitor/core";
+import {Capacitor, Plugins as CapacitorPlugins} from "@capacitor/core";
 import {ConfigurationService} from "../../../../services/configuration.service";
-import {map, switchMap, take, timeout} from "rxjs/operators";
 import {ConfigChangedMessage} from "../../../../messages/config-changed-message";
 import {InfineaBarcodeUtils} from "../infinea-to-openpos-barcode-type";
 
@@ -19,10 +18,17 @@ declare module '@capacitor/core' {
     providedIn: 'root'
 })
 export class InfineaScannerCapacitorPlugin implements IPlatformPlugin, IScanner {
-    constructor(private _config: ConfigurationService) {
+    constructor(config: ConfigurationService) {
+        if(this.pluginPresent()) {
+            config.getConfiguration('InfineaCapacitor').subscribe( (config: ConfigChangedMessage & any) => {
+                if (config.licenseKey) {
+                    CapacitorPlugins.InfineaScannerCapacitor.initialize({
+                        apiKey: config.licenseKey
+                    });
+                }
+            });
+        }
     }
-
-    private scanData$ = new Subject<IScanData>();
 
     name(): string {
         return 'InfineaScannerCapacitor';
@@ -33,27 +39,7 @@ export class InfineaScannerCapacitorPlugin implements IPlatformPlugin, IScanner 
     }
 
     initialize(): Observable<string> {
-
-        return of(CapacitorPlugins.InfineaScannerCapacitor.initialize({
-            apiKey: 'UtJtVhO9yImiQhADyh+0PqEQG0eotVpTsBN9IALb0maa2pUMXH1GvIlhzNLEsIrmFoGs4rumE1Ex4nFR9sHWy1Liox7o/7nvGYfz/kOrisY='
-        })).pipe(
-            map(() => "initialized Infinea Scanner for Capacitor")
-        );
-        // return this._config.getConfiguration('InfineaScannerCapacitor').pipe(
-        //     take(1),
-        //     timeout(10000),
-        //     switchMap((config: ConfigChangedMessage & any) => {
-        //         console.info("Message: " + JSON.stringify(config));
-        //         if (config.licenseKey) {
-        //             return of(CapacitorPlugins.InfineaCapacitor.initialize({
-        //                 apiKey: config.licenseKey
-        //             }));
-        //         }
-        //
-        //         return throwError('could not find Infinea license key');
-        //     }),
-        //     map(() => "initialized Infinea Scanner for Capacitor")
-        // );
+        return of()
     }
 
     startScanning(): Observable<IScanData> {
@@ -71,13 +57,7 @@ export class InfineaScannerCapacitorPlugin implements IPlatformPlugin, IScanner 
         });
     }
 
-    stopScanning() {
-        /*this.infineaPlugin.barcodeScan(() => {
-            console.log(`Time| ${new Date()} || Disable Barcode Scan| Success`);
-        }, () => {
-            console.log(`Time| ${new Date()} || Disable Barcode Scan| Failure`);
-        }, 'false');*/
-    }
+    stopScanning() {}
 
     triggerScan() {
     }

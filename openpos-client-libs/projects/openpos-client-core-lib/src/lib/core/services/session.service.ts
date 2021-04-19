@@ -5,7 +5,7 @@ import { Configuration } from './../../configuration/configuration';
 import { IMessageHandler } from './../interfaces/message-handler.interface';
 import { PersonalizationService } from '../personalization/personalization.service';
 
-import { Observable, Subscription, BehaviorSubject, Subject, merge, timer } from 'rxjs';
+import {Observable, Subscription, BehaviorSubject, Subject, merge, timer, ReplaySubject} from 'rxjs';
 import { map, filter, takeWhile } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { Injectable, NgZone, Inject, } from '@angular/core';

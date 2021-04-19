@@ -222,13 +222,6 @@ public class EscpPOSPrinter implements IOpenposPrinter {
                 substitutions.put("barcodeData", barcodeData);
 
                 break;
-            case PTR_BCS_UPCA:
-                substitutions.put("barcodeType", printerCommands.get(PrinterCommands.BARCODE_TYPE_CODE_UPCA));
-                List<Byte> barcodeCommand = Lists.newArrayList(ArrayUtils.toObject(data.getBytes()));
-                barcodeData = new String(toBytes(barcodeCommand));
-                substitutions.put("barcodeLength", new String(new byte[] {(byte)barcodeData.length()}));
-                substitutions.put("barcodeData", barcodeData);
-                break;
 
             default:
                 throw new PrintException("Unsupported barcode symbology: " + symbology);
