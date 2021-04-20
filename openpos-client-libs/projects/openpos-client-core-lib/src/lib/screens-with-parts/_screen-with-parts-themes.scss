@@ -11,6 +11,7 @@
 @import './transaction-search/transaction-search-theme';
 @import './simulated-peripheral-viewer/simulated-peripheral-theme';
 @import './customer-search-result-dialog/customer-search-result-dialog-theme';
+@import './loyalty-customer-form-dialog/loyalty-customer-form-dialog-theme';
 
 @mixin screen-with-parts-themes($theme){
     @include sale-theme($theme);
@@ -25,4 +26,5 @@
     @include customer-search-result-dialog-theme($theme);
     @include basic-product-option-part-theme($theme);
     @include swatch-product-option-part-theme($theme);
+    @include loyalty-customer-form-dialog-theme($theme);
 }
