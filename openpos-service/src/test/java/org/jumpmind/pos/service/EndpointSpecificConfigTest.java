@@ -1,7 +1,7 @@
 package org.jumpmind.pos.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -12,7 +12,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-class EndpointSpecificConfigTest {
+public class EndpointSpecificConfigTest {
 
     String serviceTestId;
     int endpointIndex;
@@ -24,7 +24,7 @@ class EndpointSpecificConfigTest {
     @Mock
     IConfigApplicator iConfigApplicator;
 
-    @BeforeEach
+    @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
         serviceTestId = "TestID";
