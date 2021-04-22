@@ -84,12 +84,10 @@ The module declaration provides at least the following information about the mod
 @RequestMapping("/customer")
 public interface ICustomerService {
 
-    @Sample
     @RequestMapping(path="/search", method=RequestMethod.POST)
     @ResponseBody
     public SearchCustomerResult searchCustomer(@RequestBody SearchCustomerRequest request);
     
-    @Sample
     @RequestMapping(value="/device/{deviceId}/save", method=RequestMethod.POST)
     public CustomerModel saveCustomer(@PathVariable("deviceId") String deviceId, @RequestBody CustomerModel customer);
 }
@@ -99,7 +97,6 @@ Description of the annotations:
 * @Api (Swagger) is used by swagger to generate documentation and a Rest service test page.
 * @RestController (Spring) makes this a Spring bean.
 * @RequestMapping (Spring) maps all method in this Service Interface under the URL path of "/customer"
-* @Sample (openpos_ means that you want this web method to be sampled and for the framework to collect statistics about how it is invokved.
 * @RequestMapping (Spring) is the standard Spring annotation to map a method to a more specific part of the REST URL and to an HTTP method.
 * @ResponseBody (Spring) indicates that the method return value should be mapped to the web response body (in this case, as JSON)
 
@@ -308,3 +305,39 @@ ui:
 The list of parameters determines what values to pull from the subscription request and add to the context object.
 
 See [Client Context](client-context) for adding additional parameters.
+
+## Service Endpoint Statistic Logging
+
+In order to start sampling endpoints and logging statistics, yaml configurations need to be set in the 'application.yml'. Every module and endpoint can optionally have a samplingConfig section for that level. To turn on sampling for an endpoint, a samplingConfig section will need to be created at the module and endpoint levels with enabled set to true. Optionally, in each section, a number for retention days can be set to specify how long logs should be retained for.
+
+For example, a module section may look like the following.
+~~~yaml
+openpos:
+  service:
+    specificConfig:
+      customer:
+        samplingConfig:
+          enabled: true
+          retentionDays: 4
+        profileIds:
+          - local
+        strategy: LOCAL_ONLY
+        endpoints:
+          - path: /customer/customergroups
+            profile:
+            strategy: LOCAL_ONLY
+            samplingConfig:
+                enabled: true
+          - path: /customer/detailed
+            profile:
+            strategy: LOCAL_ONLY
+            samplingConfig:
+              enabled: true
+~~~
+
+### Database Overriding
+
+Sampling configurations can also be overridden by entries in the CTX_CONFIG table. In order to override values using this method three columns are important. 
+- CONFIG_NAME column requires the yaml key leading to the desired configuration. For example, "openpos.services.specificConfig.customer.samplingConfig.enabled". 
+- CONFIG_VALUE specifies the value that should be set in the location specified by CONFIG_NAME. 
+- ENABLED will specify if this rows configuration should be used.  

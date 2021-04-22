@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.jumpmind.pos.persist.DBSession;
-import org.jumpmind.pos.service.instrumentation.Sample;
 import org.jumpmind.pos.service.instrumentation.ServiceSampleModel;
 import org.jumpmind.pos.service.strategy.AbstractInvocationStrategy;
 import org.jumpmind.pos.service.strategy.IInvocationStrategy;
@@ -33,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.StringUtils.*;
 import static org.jumpmind.pos.service.strategy.AbstractInvocationStrategy.buildPath;
 
 @Slf4j
@@ -78,9 +76,7 @@ public class EndpointInvoker implements InvocationHandler {
             build();
 
     private static final ExecutorService instrumentationExecutor = Executors.newSingleThreadExecutor(factory);
-
-    public EndpointInvoker() {
-    }
+    protected HashMap<String, Boolean> endpointEnabledCache = new HashMap<String, Boolean>();
 
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -295,7 +291,7 @@ public class EndpointInvoker implements InvocationHandler {
 
         IInvocationStrategy strategy;
         List<String> profileIds = new ArrayList<>();
-        if (endConfig != null) {
+        if (endConfig != null && endConfig.getStrategy() != null) {
             strategy = strategies.get(endConfig.getStrategy().name());
             profileIds.add(endConfig.getProfile());
         } else {
@@ -305,7 +301,11 @@ public class EndpointInvoker implements InvocationHandler {
         if (profileIds.size() == 0) {
             profileIds.add("local");
         }
-        ServiceSampleModel sample = startSample(strategy, config, proxy, method, args);
+        return invokeStrategy(path, strategy, profileIds, config, proxy, method, args, endpointImplementation, endpointsByPathMap);
+    }
+
+    protected Object invokeStrategy(String path, IInvocationStrategy strategy, List<String> profileIds, ServiceSpecificConfig config, Object proxy, Method method, Object[] args, String endpointImplementation, Map<String, Object> endpointsByPathMap) throws Throwable {
+        ServiceSampleModel sample = startSample(path, strategy, config, proxy, method, args);
         Object result = null;
         try {
             log(method, args, endpointImplementation);
@@ -315,7 +315,6 @@ public class EndpointInvoker implements InvocationHandler {
             endSampleError(sample, config, proxy, method, args, result, ex);
             throw ex;
         }
-
         return result;
     }
 
@@ -363,22 +362,38 @@ public class EndpointInvoker implements InvocationHandler {
     }
 
     protected ServiceSampleModel startSample(
+            String path,
             IInvocationStrategy strategy,
             ServiceSpecificConfig config,
             Object proxy,
             Method method,
             Object[] args) {
-        ServiceSampleModel sample = null;
-        if (method.isAnnotationPresent(Sample.class)) {
-            sample = new ServiceSampleModel();
-            sample.setSampleId(installationId + System.currentTimeMillis());
-            sample.setInstallationId(installationId);
-            sample.setHostname(AppUtils.getHostName());
-            sample.setServiceName(method.getDeclaringClass().getSimpleName() + "." + method.getName());
-            sample.setServiceType(strategy.getStrategyName());
-            sample.setStartTime(new Date());
+        if(isSamplingEnabled(path, config)){
+                ServiceSampleModel serviceSampleModel = new ServiceSampleModel();
+                serviceSampleModel.setSampleId(installationId + System.currentTimeMillis());
+                serviceSampleModel.setInstallationId(installationId);
+                serviceSampleModel.setHostname(AppUtils.getHostName());
+                serviceSampleModel.setServiceName(method.getDeclaringClass().getSimpleName() + "." + method.getName());
+                serviceSampleModel.setServiceType(strategy.getStrategyName());
+                serviceSampleModel.setStartTime(new Date());
+                return serviceSampleModel;
         }
-        return sample;
+        return null;
+    }
+
+    protected boolean isSamplingEnabled(String path, ServiceSpecificConfig config) {
+        if(endpointEnabledCache.get(path) == null) {
+            Optional<EndpointSpecificConfig> endpointSpecificConfig = Optional.empty();
+            if (config != null && config.getSamplingConfig() != null && config.getSamplingConfig().isEnabled()
+                    && config.getEndpoints() != null) {
+                endpointSpecificConfig = config.getEndpoints()
+                        .stream()
+                        .filter(endpoint -> endpoint.getSamplingConfig().isEnabled() && path.equals(endpoint.getPath()))
+                        .findFirst();
+            }
+            endpointEnabledCache.put(path, endpointSpecificConfig.isPresent());
+        }
+        return endpointEnabledCache.get(path);
     }
 
     protected void endSampleSuccess(

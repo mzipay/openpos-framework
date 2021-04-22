@@ -1,12 +1,27 @@
 package org.jumpmind.pos.service;
 
 import org.jumpmind.pos.service.strategy.InvocationStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EndpointSpecificConfig implements Cloneable {
+
+    @Autowired(required = false)
+    IConfigApplicator additionalConfigSource;
 
     protected String profile;
     protected InvocationStrategy strategy;
     protected String path;
+    protected SamplingConfig samplingConfig;
+
+    public SamplingConfig getSamplingConfig() {
+        return samplingConfig;
+    }
+
+    public void setSamplingConfig(SamplingConfig samplingConfig) {
+        this.samplingConfig = samplingConfig;
+    }
 
     public String getPath() {
         return path;
@@ -42,5 +57,14 @@ public class EndpointSpecificConfig implements Cloneable {
         }
     }
 
+    public void findAdditionalConfigs(String serviceId, int index) {
+        if(samplingConfig == null){
+            samplingConfig = new SamplingConfig();
+        }
 
+        if(additionalConfigSource != null){
+            String startsWith = String.format("openpos.services.specificConfig.%s.endpoints[%d].samplingConfig", serviceId, index);
+            additionalConfigSource.applyAdditionalConfiguration(startsWith, samplingConfig);
+        }
+    }
 }
