@@ -1,5 +1,6 @@
 package org.jumpmind.pos.util.clientcontext;
 
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.jumpmind.pos.util.AppUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +29,10 @@ public class ClientContext {
 
     public void put(String name, String value) {
         if (propertiesMap.get() == null) {
-            propertiesMap.set(new HashMap<>());
+            propertiesMap.set(new CaseInsensitiveMap<>());
         }
 
-        if ("deviceMode".equals(name))  {
+        if ("deviceMode".equalsIgnoreCase(name))  {
             value = ((value == null) || value.equals("'not set'") ? "default" : value);
         }
 
@@ -42,15 +43,15 @@ public class ClientContext {
         Map<String, String> props = propertiesMap.get();
 
         if (props == null || !props.containsKey(name)) {
-            if ("deviceId".equals(name)) {
+            if ("deviceId".equalsIgnoreCase(name)) {
                 return installationId;
-            } else if ("businessUnitId".equals(name)) {
+            } else if ("businessUnitId".equalsIgnoreCase(name)) {
                 return businessUnitId;
-            } else if ("appId".equals(name)) {
+            } else if ("appId".equalsIgnoreCase(name)) {
                 return "server";
-            } else if ("deviceMode".equals(name)) {
+            } else if ("deviceMode".equalsIgnoreCase(name)) {
                 return deviceMode;
-            } else if ("timezoneOffset".equals(name)) {
+            } else if ("timezoneOffset".equalsIgnoreCase(name)) {
                 return AppUtils.getTimezoneOffset();
             }
             log.info("ClientContext property '" + name + "' not found in ClientContext map.");
