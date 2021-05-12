@@ -2,12 +2,14 @@ package org.jumpmind.pos.devices.model;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jumpmind.pos.devices.DeviceNotFoundException;
 import org.jumpmind.pos.persist.DBSession;
 import org.jumpmind.pos.persist.ModelId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @Repository
 @Slf4j
 public class DevicesRepository {
+    private final static String CACHE_NAME = "/devices/device";
 
     @Autowired
     @Lazy
@@ -25,7 +28,7 @@ public class DevicesRepository {
     @Autowired
     VirtualDeviceRepository virtualDeviceRepository;
 
-    @Cacheable(value="/devices/device", key="#deviceId + '-' + #appId")
+    @Cacheable(value = CACHE_NAME, key = "#deviceId + '-' + #appId")
     public DeviceModel getDevice(String deviceId, String appId) {
         DeviceModel device = devSession.findByNaturalId(DeviceModel.class, new ModelId("deviceId", deviceId, "appId", appId));
         if (device != null) {
@@ -46,6 +49,57 @@ public class DevicesRepository {
         return devSession.findByFields(DeviceModel.class, params, 1000);
     }
 
+    public List<DeviceModel> getUnpairedDevices(String businessUnitId) {
+        return findDevices(businessUnitId)
+                .stream()
+                .filter(device -> StringUtils.isBlank(device.getPairedDeviceId()))
+                .collect(Collectors.toList());
+    }
+
+    public List<DeviceModel> getUnpairedDevicesByAppId(String businessUnitId, String appId) {
+        return getUnpairedDevices(businessUnitId).stream()
+                .filter(device -> device.getAppId().equals(appId))
+                .collect(Collectors.toList());
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = CACHE_NAME, key = "#deviceId + '-' + #appId"),
+            @CacheEvict(value = CACHE_NAME, key = "#pairedDeviceId + '-' + #pairedAppId")
+    })
+    public void pairDevice(String deviceId, String appId, String pairedDeviceId, String pairedAppId) {
+        DeviceModel device = getDevice(deviceId, appId);
+
+        // First unpair an existing paired device
+        if (StringUtils.isNotBlank(device.getPairedDeviceId())) {
+            unpairDevice(deviceId, appId, device.getPairedDeviceId(), pairedAppId);
+        }
+
+        // Pair device
+        device.setPairedDeviceId(pairedDeviceId);
+        saveDevice(device);
+
+        // Link paired device to device it's paired with
+        DeviceModel pairedDevice = getDevice(pairedDeviceId, pairedAppId);
+        pairedDevice.setPairedDeviceId(deviceId);
+        saveDevice(pairedDevice);
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = CACHE_NAME, key = "#deviceId + '-' + #appId"),
+            @CacheEvict(value = CACHE_NAME, key = "#pairedDeviceId + '-' + #pairedAppId")
+    })
+    public void unpairDevice(String deviceId, String appId, String pairedDeviceId, String pairedAppId) {
+        // Unpair device
+        DeviceModel device = getDevice(deviceId, appId);
+        device.setPairedDeviceId(null);
+        saveDevice(device);
+
+        // Unlink paired device to device it was paired with
+        DeviceModel pairedDevice = getDevice(pairedDeviceId, pairedAppId);
+        pairedDevice.setPairedDeviceId(null);
+        saveDevice(pairedDevice);
+    }
+
     public String getDeviceAuth(String deviceId, String appId) {
         DeviceAuthModel deviceAuthModel = devSession.findByNaturalId(DeviceAuthModel.class, new ModelId("deviceId", deviceId, "appId", appId));
 
@@ -59,13 +113,13 @@ public class DevicesRepository {
     public List<DeviceAuthModel> getDisconnectedDevices(String businessUnitId) {
         Map<String, Object> statusParams = new HashMap<>();
         statusParams.put("deviceStatus", DeviceStatusConstants.CONNECTED);
-        Set<String> connectedDevices = devSession.findByFields(DeviceStatusModel.class, statusParams, 10000).stream().map(d-> d.getDeviceId()+":"+d.getAppId()).collect(Collectors.toSet());
+        Set<String> connectedDevices = devSession.findByFields(DeviceStatusModel.class, statusParams, 10000).stream().map(d -> d.getDeviceId() + ":" + d.getAppId()).collect(Collectors.toSet());
 
         Map<String, Object> deviceParams = new HashMap<>();
         deviceParams.put("businessUnitId", businessUnitId);
-        final Set<String> devices = devSession.findByFields(DeviceModel.class, deviceParams,10000).stream().map(d-> d.getDeviceId()+":"+d.getAppId()).collect(Collectors.toSet());
+        final Set<String> devices = devSession.findByFields(DeviceModel.class, deviceParams, 10000).stream().map(d -> d.getDeviceId() + ":" + d.getAppId()).collect(Collectors.toSet());
         devices.removeAll(connectedDevices);
-        return devSession.findAll(DeviceAuthModel.class, 10000).stream().filter(d-> devices.contains(d.getDeviceId()+":"+d.getAppId())).sorted().collect(Collectors.toList());
+        return devSession.findAll(DeviceAuthModel.class, 10000).stream().filter(d -> devices.contains(d.getDeviceId() + ":" + d.getAppId())).sorted().collect(Collectors.toList());
     }
 
     public DeviceModel getDeviceByAuth(String auth) {
@@ -93,7 +147,7 @@ public class DevicesRepository {
         return deviceModel;
     }
 
-    @CacheEvict(value = "/devices/device", key="#device.deviceId + '-' + #device.appId")
+    @CacheEvict(value = CACHE_NAME, key = "#device.deviceId + '-' + #device.appId")
     public void saveDevice(DeviceModel device) {
 
         devSession.save(device);
@@ -132,9 +186,9 @@ public class DevicesRepository {
     public void updateDeviceStatus(String deviceId, String appId, String status) {
         DeviceStatusModel statusModel = devSession.findByNaturalId(DeviceStatusModel.class,
                 ModelId.builder().
-                key("deviceId", deviceId).
-                key("appId", appId).build());
-        if (statusModel == null) {
+                        key("deviceId", deviceId).
+                        key("appId", appId).build());
+        if (statusModel == null || !statusModel.getDeviceId().equals(deviceId)) {
             statusModel = DeviceStatusModel.builder().deviceId(deviceId).appId(appId).build();
         }
         statusModel.setDeviceStatus(status);
