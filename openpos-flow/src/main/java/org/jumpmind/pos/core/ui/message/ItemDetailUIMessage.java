@@ -34,9 +34,6 @@ public class ItemDetailUIMessage extends UIMessage {
     
     private List<ProductOptionComponent> productOptionsComponents;
     private String itemOptionInstructions;
-    
-    private String inventoryMessage;
-    private boolean buddyStoreOffline;
     private String buddyStoreTitle;
     private String buddyStoreIcon;
     private String buddyStoreOfflineTitle;
@@ -44,6 +41,8 @@ public class ItemDetailUIMessage extends UIMessage {
     private List<BuddyStore> buddyStores;
     private List<ActionItem> actions;
     private List<String> detailSections;
+    private String inventoryMessageProviderKey;
+    private String buddyStoreProviderKey;
 
 
     public void addItemProperty(DisplayProperty property) {
