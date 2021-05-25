@@ -5,16 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonalizationRequest {
-    private String deviceToken;
-    private String deviceId;
+public class GetPairedDevicesRequest {
+    private String businessUnitId;
     private String appId;
-    private String pairedDeviceId;
-    private Map<String, String> personalizationParameters;
 }

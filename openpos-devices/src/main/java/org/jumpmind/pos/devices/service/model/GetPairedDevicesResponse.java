@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jumpmind.pos.devices.model.DeviceModel;
+
+import java.util.List;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetDeviceRequest {
-    private String deviceId;
+public class GetPairedDevicesResponse {
+    List<DeviceModel> devices;
 }
