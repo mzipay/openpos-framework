@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PersonalizationConfigResponse } from './personalization-config-response.interface';
 import { BehaviorSubject, Observable,throwError, Subject, zip } from 'rxjs';
@@ -8,10 +8,9 @@ import {PersonalizationResponse} from './personalization-response.interface';
 import {AutoPersonalizationParametersResponse} from "./device-personalization.interface";
 import {ZeroconfService} from "@ionic-native/zeroconf";
 import {Configuration} from "../../configuration/configuration";
-import {WrapperService} from "../services/wrapper.service";
 
-import { Capacitor, Plugins as CapacitorPlugins } from '@capacitor/core';
 import { Storage } from '../storage/storage.service';
+import { Zeroconf, ZEROCONF_TOKEN } from '../startup/zeroconf/zeroconf';
 
 @Injectable({
     providedIn: 'root'
@@ -67,13 +66,9 @@ export class PersonalizationService {
         });
     }
 
-    public shouldAutoPersonalize(): boolean {
-        return this.wrapperService.shouldAutoPersonalize();
-    }
-
     public getAutoPersonalizationParameters(deviceName: string, config: ZeroconfService): Observable<AutoPersonalizationParametersResponse> {
         let url = this.sslEnabled$.getValue() ? 'https://' : 'http://';
-        url += `${config.hostname}:${config.port}/${config.txtRecord.path}`;
+        url += `${config.ipv4Addresses[0]}:${config.port}/${config.txtRecord.path}`;
         return this.http.get<AutoPersonalizationParametersResponse>(url, { params: { deviceName: deviceName }})
             .pipe(
                 timeout(Configuration.autoPersonalizationRequestTimeoutMillis),
@@ -120,6 +115,7 @@ export class PersonalizationService {
         url += serverName + ':' + serverPort + '/devices/personalize';
 
         if (personalizationParameters) {
+            console.log("personalizationParams", personalizationParameters);
             personalizationParameters.forEach((value, key) => request.personalizationParameters[key] = value);
         }
 

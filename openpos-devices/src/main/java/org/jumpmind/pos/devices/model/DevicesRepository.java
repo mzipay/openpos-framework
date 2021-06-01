@@ -197,9 +197,18 @@ public class DevicesRepository {
     }
 
     public DevicePersonalizationModel findDevicePersonalizationModel(String deviceName) {
-        return devSession.findByNaturalId(DevicePersonalizationModel.class, new ModelId("deviceName", deviceName));
-    }
+        final DevicePersonalizationModel model = devSession.findByNaturalId(DevicePersonalizationModel.class, new ModelId("deviceName", deviceName));
+        List<DeviceParamModel> params = getDeviceParams(model.getDeviceId());
 
+        if (params == null) {
+            params = new ArrayList<>();
+        }
+
+        model.setDeviceParamModels(params);
+
+        return model;
+    }
+  
     private List<DeviceParamModel> getDeviceParams(String deviceId) {
         Map<String, Object> params = new HashMap<>();
         params.put("deviceId", deviceId);
