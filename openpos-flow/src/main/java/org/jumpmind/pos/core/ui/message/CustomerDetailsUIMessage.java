@@ -24,6 +24,7 @@ public class CustomerDetailsUIMessage extends UIMessage {
     private Boolean membershipPointsEnabled;
     private Boolean rewardTabEnabled;
     private Boolean rewardHistoryTabEnabled;
+    private Boolean itemHistoryEnabled;
 
     private String membershipLabel;
     private String contactLabel;
@@ -48,6 +49,9 @@ public class CustomerDetailsUIMessage extends UIMessage {
     private String nonMemberIcon;
     private String expiredIcon;
     private String applyIcon;
+
+    private String itemHistoryLabel;
+    private String itemsHistoryDataProviderKey;
 
     public CustomerDetailsUIMessage() {
         setScreenType(UIMessageType.CUSTOMER_DETAILS_DIALOG);
